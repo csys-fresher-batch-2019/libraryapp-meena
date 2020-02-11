@@ -8,12 +8,13 @@ public class Logger
 	       return log;
 	  }
 	  public void getInput(Object message) {
-		  log.getInput(message);
+		  System.out.println(message);
+		  
 	  
 	  
 	  }
 	  public void debug(Object message) {
-		  log.getInput(message);
+		  System.out.println(message);
 	  
 	  
 	  }

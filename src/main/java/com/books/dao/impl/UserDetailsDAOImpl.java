@@ -23,10 +23,6 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 			try(Connection connection=ConnectionUtil.getConnection();
 					PreparedStatement pst=connection.prepareStatement(sql);)
 			{
-				
-				
-				
-				
 				pst.setString(1,userDetails.getUserName());
 				pst.setString(2,userDetails.getAddress());
 				pst.setLong(3,userDetails.getPhno());
