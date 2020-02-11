@@ -1,6 +1,7 @@
 package com.books.dao.impl;
 
 import java.sql.Connection;
+import com.books.logger.Logger;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,17 +14,14 @@ import com.books.dao.UserDAO;
 
 public class UserDAOImpl implements UserDAO
 {
+	 private static final Logger log=Logger.getInstance(); 
 
 	public List<User> displayBooks(int userId) throws Exception {
-		Connection connection=null;
-		PreparedStatement pst=null;
+		String sql="select book_id,issued_date,due_date,returned_date,fine_amount from  fine_calc where user_id=? order by issued_date desc";
 		List<User>list=new ArrayList<User>();
-		try
+		try(Connection connection=ConnectionUtil.getConnection();
+				PreparedStatement pst=connection.prepareStatement(sql);)
 		{
-			connection=ConnectionUtil.getConnection();
-			String sql="select book_id,issued_date,due_date,returned_date,fine_amount from  fine_calc where user_id=? order by issued_date desc";
-			System.out.println(sql);
-			pst=connection.prepareStatement(sql);
 			pst.setInt(1, userId);
 			ResultSet rs=pst.executeQuery();
 			while(rs.next())
@@ -45,18 +43,39 @@ public class UserDAOImpl implements UserDAO
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(connection!=null)
-			{
-				connection.close();
-			}
-		}
+		
 		return list;
 	}
+
+	public void checkLogin(String email, String password) throws Exception {
+		
+		String sql="select email,password from users where email=? and password=?";
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement pst=con.prepareStatement(sql);
+				ResultSet rs=pst.executeQuery();)
+		{
+			
+			pst.setString(1, email);
+			pst.setString(2, password);
+			
+			
+			if(rs.next()) {
+				log.getInput("Welcome");
+				
+				
+			}
+			else
+			{
+				log.getInput("Invalid Login");
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
+
+	
 
 }

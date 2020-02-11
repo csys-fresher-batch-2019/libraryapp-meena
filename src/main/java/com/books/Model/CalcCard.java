@@ -1,4 +1,4 @@
-package com.books.Model;
+package com.books.model;
 
 public class CalcCard {
 	public int userId;

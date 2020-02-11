@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 import com.books.model.Additional;
 import com.books.model.CalcCard;
+import com.books.model.CategorySettings;
+import com.books.model.LanguageSettings;
 import com.books.model.PenalityCalc;
 import com.books.dao.impl.PenalityCalcDAOImpl;
 
@@ -20,17 +22,23 @@ public class TestPenalityCalc {
 		Scanner k=new Scanner(System.in);
 		do
 		{
-			System.out.println("Enter your choice");
-			System.out.println("1.Calculate Fine Amount");
-			System.out.println("2.Update returned status");
-			System.out.println("3.Display Fine");
-			System.out.println("4.Update Due Date");
-			System.out.println("5.Set Book Limit");
-			System.out.println("6.Set Penality");
-			System.out.println("7.Set Count of Due Days");
-			System.out.println("8.Find count of each book");
-			System.out.println("9.Availablity cards for the each user");
-			System.out.println("10.Insert user-book details");
+			log.getInput("Enter your choice");
+			log.getInput("1.Calculate Fine Amount");
+			log.getInput("2.Update returned status");
+			log.getInput("3.Display Fine");
+			log.getInput("4.Update Due Date");
+			log.getInput("5.Set Book Limit");
+			log.getInput("6.Set Penality");
+			log.getInput("7.Set Count of Due Days");
+			log.getInput("8.Find count of each book");
+			log.getInput("9.Availablity cards for the each user");
+			log.getInput("10.Insert user-book details");
+			log.getInput("11.Insert new language");
+			log.getInput("12.Delete languages");
+			log.getInput("13.Display languages");
+			log.getInput("14.Insert new category");
+			log.getInput("15.delete category");;
+			log.getInput("16.Display categories");
 			int ch=k.nextInt();
 			switch(ch)
 			{
@@ -38,11 +46,11 @@ public class TestPenalityCalc {
 				m.calculateFineAmount();
 				break;
 			case 2:
-				System.out.println("Enter the user id");
+				log.getInput("Enter the user id");
 				int userId=k.nextInt();
-				System.out.println("Enter the book id");
+				log.getInput("Enter the book id");
 				int bookId=k.nextInt();
-				System.out.println("Enter the returned date");
+				log.getInput("Enter the returned date");
 				String returnedDate=k.next();
 				LocalDate returnedDate1=LocalDate.parse(returnedDate);
 				//Date.=Date.valueOf(returnedDate)
@@ -51,7 +59,7 @@ public class TestPenalityCalc {
 				List<PenalityCalc>display=m.displayFineDetails();
 				for (PenalityCalc penalityCalc : display)
 				{
-					System.out.println(penalityCalc);
+					log.getInput(penalityCalc);
 				}
 				//m.displayFineDetails();
 				break;
@@ -59,17 +67,17 @@ public class TestPenalityCalc {
 				m.updateDueDate();
 				break;
 			case 5:
-				System.out.println("Enter the Limit:");
+				log.getInput("Enter the Limit:");
 				int count=k.nextInt();
 				m.setBookLimit(count);
 				break;
 			case 6:
-				System.out.println("Enter the penality amount per day:");
+				log.getInput("Enter the penality amount per day:");
 				int count1=k.nextInt();
 				m.setPenality(count1);
 				break;
 			case 7:
-				System.out.println("Enter the count of due days:");
+				log.getInput("Enter the count of due days:");
 				int count2=k.nextInt();
 				m.setDueDays(count2);
 				break;
@@ -78,32 +86,67 @@ public class TestPenalityCalc {
 				List<Additional> displaycount=m.booksCount();
 				for (Additional additional : displaycount)
 				{
-					System.out.println(additional);
+					log.getInput(additional);
 				}
 				break;
 			case 9:
 				List<CalcCard>displayCard=m.userCardCount();
 				for(CalcCard calcCard:displayCard)
 				{
-					System.out.println(calcCard);
+					log.getInput(calcCard);
 				}
 				break;
 			case 10:
-				System.out.println("Enter the user id");
+				log.getInput("Enter the user id");
 				int userId2=k.nextInt();
-				System.out.println("Enter the book id");
+				log.getInput("Enter the book id");
 				int bookId2=k.nextInt();
-				System.out.println("Enter the issued date");
+				log.getInput("Enter the issued date");
 				String issuedDate=k.next();
 				LocalDate issuedDate1=LocalDate.parse(issuedDate);
 				Date rd=Date.valueOf(issuedDate1);
-				m.insertUserBookDetails(userId2,bookId2,rd);
+				m.insertUserBookDetails(bookId2,userId2,rd);
 				break;
+			case 11:
+				log.getInput("Enter the language");
+				String language=k.next();
+				m.insertNewLanguage(language);
+				break;
+			case 12:
+				log.getInput("Enter the language to delete");
+				String language1=k.next();
+				m.deleteLanguage(language1);
+				break;
+			case 13:
+				List<LanguageSettings>displayLanguage=m.displayLanguages();
+				for(LanguageSettings languages:displayLanguage)
+				{
+					log.getInput(languages);
+				}
+				break;
+			case 14:
+				log.getInput("Enter the category");
+				String category=k.next();
+				m.insertNewCategory(category);
+				break;
+			case 15:
+				log.getInput("Enter the category");
+				String category1=k.next();
+				m.deteleCategory(category1);
+				break;
+			case 16:
+				List<CategorySettings>displayCategory=m.displayCategories();
+				for(CategorySettings categories:displayCategory)
+				{
+					log.getInput(categories);
+				}
+				break;
+				
 			default:
-				System.out.println("Invalid choice");
+				log.getInput("Invalid choice");
 				break;
 			}
-			System.out.println("Do you want to continue(Y/N)");
+			log.getInput("Do you want to continue(Y/N)");
 			s=k.next().charAt(0);
 		}while(s=='y'||s=='Y');
 

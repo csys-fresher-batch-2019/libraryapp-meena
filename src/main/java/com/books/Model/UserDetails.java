@@ -1,23 +1,35 @@
-package com.books.Model;
+package com.books.model;
 
 public class UserDetails {
 	public int userId;
 	public String userName;
 	public String address;
 	public long phno;
+	public String email;
+	public String gender;
+	public int active=1;
+	public String password;
 	
-		public UserDetails(String userName, String address, long phno) {
+		public UserDetails(String userName, String address, long phno, String email, String password, String gender) {
 		
 		this.userName = userName;
 		this.address = address;
 		this.phno = phno;
+		this.email=email;
+		this.password=password;
+		this.gender=gender;
 	}
-	public UserDetails(int userId, String userName, String address, long phno) {
-			this.userId=userId;
-			this.userName=userName;
-			this.address=address;
-			this.phno=phno;
+	
+	public UserDetails(int userId, String userName, String address, long phno, String email, String gender) {
+			
+			this.userId = userId;
+			this.userName = userName;
+			this.address = address;
+			this.phno = phno;
+			this.email = email;
+			this.gender = gender;
 		}
+
 	public int getUserId() {
 		return userId;
 	}
@@ -44,8 +56,10 @@ public class UserDetails {
 	}
 	@Override
 	public String toString() {
-		return "UserDetails [userId=" + userId + ", userName=" + userName + ", address=" + address + ", phno=" + phno+ "]";
+		return "UserDetails [userId=" + userId + ", userName=" + userName + ", address=" + address + ", phno=" + phno
+				+ ", email=" + email + ", gender=" + gender + "]";
 	}
+	
 	
 }
 

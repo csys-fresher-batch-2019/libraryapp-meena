@@ -1,8 +1,8 @@
-package com.books.Model;
+package com.books.model;
 
 public class BookDetails 
 {
-	private int bookId;
+	public int isbnNo;
 	public String bookName;
 	public String authorName;
 	public String publisher;
@@ -15,11 +15,11 @@ public class BookDetails
 	
 	public int getBookId() {
 
-		if(bookId<0)
+		if(isbnNo<0)
 		{
 			throw new IllegalArgumentException("Invalid Id");
 		}
-		return bookId;
+		return isbnNo;
 	}
 
 
@@ -32,16 +32,16 @@ public class BookDetails
 
 
 
-	public BookDetails(int bookId)
+	public BookDetails(int isbnNo)
 	{
-		this.bookId=bookId;
+		this.isbnNo=isbnNo;
 	}
 
 
 
-	public BookDetails(int bookId, String bookName, String authorName, String pub, int ver, String category,
+	public BookDetails(int isbnNo, String bookName, String authorName, String pub, int ver, String category,
 			String language, int active) {
-		this.bookId=bookId;
+		this.isbnNo=isbnNo;
 		this.bookName=bookName;
 		this.authorName=authorName;
 		this.publisher=pub;
@@ -54,8 +54,8 @@ public class BookDetails
 
 
 
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
+	public void setBookId(int isbn_no) {
+		this.isbnNo = isbn_no;
 	}
 
 
@@ -146,11 +146,14 @@ public class BookDetails
 
 	@Override
 	public String toString() {
-		return "BookDetails [bookId=" + bookId + ", bookName=" + bookName + ", authorName=" + authorName
+		return "BookDetails [isbnNo=" + isbnNo + ", bookName=" + bookName + ", authorName=" + authorName
 				+ ", publisher=" + publisher + ", version=" + version + ", categories=" + categories + ", languages="
 				+ languages + ", active=" + active + "]";
 	}
 
+
+
+	
 	
 	/*public BookDetails(int bookId, String bookName, String authorName, String publisher, int version, String categories,
 			String languages,int active) {

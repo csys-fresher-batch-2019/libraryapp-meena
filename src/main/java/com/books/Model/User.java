@@ -11,6 +11,7 @@ public Date issuedDate;
 public Date dueDate;
 public Date returnedDate;
 public int fineAmount;
+
 public User(int bookId, Date issuedDate, Date dueDate, Date returnedDate, int fineAmount) {
 	this.bookId=bookId;
 	this.issuedDate=issuedDate;

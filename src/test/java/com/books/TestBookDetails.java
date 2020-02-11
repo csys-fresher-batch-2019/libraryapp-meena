@@ -21,23 +21,24 @@ public class TestBookDetails
 		char s;
 		
 		do {
-			System.out.println("Enter your choice");
+			log.getInput("Enter your choice");
 			
-			System.out.println("1.Display book details");
-			System.out.println("2.Insert book detail");
-			System.out.println("3.Delete book detail");
-			System.out.println("4.Display total books in library");
+			log.getInput("1.Display book details");
+			log.getInput("2.Insert book detail");
+			log.getInput("3.Delete book detail");
+			log.getInput("4.Display total books in library");
 			int c=sc.nextInt();
 			switch(c) 
 			{
 			case 1:
 				List<BookDetails> displayBooks = k.displayBooks();
 				for (BookDetails bookDetails : displayBooks) {
-					System.out.println(bookDetails);
+					log.getInput(bookDetails);
 				}
 				break;
 			case 2:
-				
+				log.getInput("Enter the ISBN number");
+				obj.isbnNo=sc.nextInt();
 				System.out.print("Enter BookName:");
 				obj.bookName=sc.next();
 			//	sc.nextLine();
@@ -57,24 +58,24 @@ public class TestBookDetails
 				obj.languages=sc.next();
 				//sc.nextLine();
 				//BookDetails obj=new BookDetails(bookName,authorName,publisher,version,category,language);
-				System.out.println(obj);
+				log.getInput(obj);
 				k.insertBookDetails(obj);
 				break;
 			case 3:
-				System.out.print("Enter the book Id");
+				System.out.print("Enter the ISBN number");
 				int id=sc.nextInt();
 				
 				k.deleteBookDetails(id);
 				break;
 			case 4:
 				int tot=k.totalBooks();
-				System.out.println(tot);
+				log.getInput(tot);
 				break;
 			default:
-				System.out.println("Invalid choice");
+				log.getInput("Invalid choice");
 				break;
 			}
-			System.out.println("Do you want to continue?y/n");
+			log.getInput("Do you want to continue?y/n");
 		     s=sc.next().charAt(0);
 			
 		}while(s=='y'||s=='Y');

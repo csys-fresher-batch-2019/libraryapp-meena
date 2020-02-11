@@ -7,7 +7,7 @@ import com.books.model.BookStockDetails;
 
 public interface BookStockDetailsDAO 
 {
-	public void insertBookStockDetails(int bookId,int quantity)throws Exception;
+	public void insertBookStockDetails(int isbnNo)throws Exception;
 	
 	public List<BookStockDetails> displayBookStockDetails()throws Exception;
 	

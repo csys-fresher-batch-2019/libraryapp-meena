@@ -14,41 +14,47 @@ public class TestUserDetails {
 		char k;
 		
 		do {
-			System.out.println("Enter your choice");
-			System.out.println("1.Enter the user details");
-			System.out.println("2.Display user details");
-			System.out.println("3.Delete user details");
+			log.getInput("Enter your choice");
+			log.getInput("1.Enter the user details");
+			log.getInput("2.Display user details");
+			log.getInput("3.Delete user details");
 			int ch=t.nextInt();
 			
 			switch(ch){
 			case 1:
 				
-				System.out.println("Enter the user name:");
+				log.getInput("Enter the user name:");
 				String userName=t.next();
-				System.out.println("Enter the address:");
+				log.getInput("Enter the address:");
 				String address=t.next();
-				System.out.println("Enter the phone number:");
+				log.getInput("Enter the phone number:");
 				long phno=t.nextLong();
-				UserDetails userDetails=new UserDetails(userName,address,phno);
+				log.getInput("Enter the email id");
+				String email=t.next();
+				log.getInput("Enter the password");
+				String password=t.next();
+				log.getInput("Choose the gender:(M/F)");
+				String gender=t.next();
+				UserDetails userDetails=new UserDetails(userName,address,phno,email,password,gender);
 				m.insertUserDetails(userDetails);
 				break;
 			case 2:
 				List<UserDetails> displayUserDetails=m.displayUserDetails();
 				for (UserDetails userdetails : displayUserDetails) 
 				{
-					System.out.println(userdetails);
+					log.getInput(userdetails);
 				}
 				break;
 			case 3:
-				System.out.println("Enter the user Id");
+				log.getInput("Enter the user Id");
 				int userId=t.nextInt();
 				m.deleteUserDetails( userId);
 				break;
 			default:
-				System.out.println("Invalid option");
+				log.getInput("Invalid option");
 				break;
 			}
-			System.out.println("Do you want to continue (y/n)");
+			log.getInput("Do you want to continue (y/n)");
 			 k=t.next().charAt(0);
 
 		}while(k=='y'||k=='Y');

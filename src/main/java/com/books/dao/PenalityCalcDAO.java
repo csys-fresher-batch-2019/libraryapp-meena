@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.books.model.Additional;
 import com.books.model.CalcCard;
+import com.books.model.CategorySettings;
+import com.books.model.LanguageSettings;
 import com.books.model.PenalityCalc;
 
 public interface PenalityCalcDAO {
@@ -29,4 +31,16 @@ public interface PenalityCalcDAO {
 	public List<CalcCard>userCardCount()throws Exception;
 	
 	public void insertUserBookDetails(int bookId,int userId,Date issuedDate)throws Exception;
+	
+	public void insertNewLanguage(String language)throws Exception;
+	
+	public void deleteLanguage(String language1)throws Exception;
+	
+	public List<LanguageSettings>displayLanguages()throws Exception;
+	
+	public void insertNewCategory(String category)throws Exception;
+	
+	public void deteleCategory(String category1)throws Exception;
+	
+	public List<CategorySettings>displayCategories()throws Exception;
 }

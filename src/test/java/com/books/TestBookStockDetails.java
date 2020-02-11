@@ -16,10 +16,10 @@ public class TestBookStockDetails {
 		char s;
 		
 		do {
-			System.out.println("Enter your choice");
-			System.out.println("1.Display Stocks");
-			System.out.println("2.Insert new stocks");
-			System.out.println("3.Update stock room");
+			log.getInput("Enter your choice");
+			log.getInput("1.Display Stocks");
+			log.getInput("2.Insert new stocks");
+			log.getInput("3.Update stock room");
 			int ch=k.nextInt();
 			switch(ch)
 			{
@@ -27,28 +27,27 @@ public class TestBookStockDetails {
 				List<BookStockDetails>displayBookStockDetails=m.displayBookStockDetails();
 				for (BookStockDetails bookStockDetails : displayBookStockDetails)
 				{
-					System.out.println(bookStockDetails);
+					log.getInput(bookStockDetails);
 				}
 				break;
 			case 2:
-				System.out.println("Enter the book id:");
-				obj.bookId=k.nextInt();
-				System.out.println("Enter the quantity:");
-				obj.quantity=k.nextInt();
+				log.getInput("Enter the ISBN number:");
+				obj.isbnNo=k.nextInt();
+				
 				//BookStockDetails omg=new BookStockDetails(bookId2,quantity2);
-				m.insertBookStockDetails(obj.bookId,obj.quantity);
+				m.insertBookStockDetails(obj.isbnNo);
 				break;
 			case 3:
 				m.updateStockRoom();
-				System.out.println("Updated");
+				//log.getInput("Updated");
 				break;
 			default:
-					System.out.println("Invalid");
+					log.getInput("Invalid");
 					break;
 				
 			}
 			
-			System.out.println("Do you want to continue?(y/n)");
+			log.getInput("Do you want to continue?(y/n)");
 			s=k.next().charAt(0);
 		}while(s=='y'||s=='Y');
 		k.close();

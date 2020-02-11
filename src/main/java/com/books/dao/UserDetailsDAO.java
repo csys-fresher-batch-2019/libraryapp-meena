@@ -11,5 +11,5 @@ public interface UserDetailsDAO
 	
 	public List<UserDetails>displayUserDetails()throws Exception;
 	 
-	 public void deleteUserDetails(int userId)throws Exception;
-}
+	public void deleteUserDetails(int userId)throws Exception;
+} 

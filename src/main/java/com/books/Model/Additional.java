@@ -1,20 +1,21 @@
-package com.books.Model;
+package com.books.model;
 
 public class Additional {
 	public int bookId;
 	public String bookName;
 	public int count;
+	public int isbnNo;
 	
-	public Additional(int bookId, String bookName, int count) {
+	public Additional(int isbnNo, int count) {
 		super();
-		this.bookId = bookId;
-		this.bookName = bookName;
+		this.isbnNo = isbnNo;
+		//this.bookName = bookName;
 		this.count = count;
 	}
 
 	@Override
 	public String toString() {
-		return "Additional [bookName=" + bookName + ", count=" + count + "]";
+		return "Additional [isbnNo=" +isbnNo + ", count=" + count + "]";
 	}
 
 }

@@ -11,12 +11,12 @@ import java.util.List;
 import com.books.util.ConnectionUtil;
 import com.books.model.BookDetails;
 
-//import java.util.ArrayList;
-
 import com.books.dao.BookDetailsDAO;
+import com.books.logger.Logger;
 
 public class BookDetailsDAOImpl implements BookDetailsDAO {
-	//BookDetails bo=new BookDetails();
+	 private static final Logger log=Logger.getInstance();
+
 
 	public List<BookDetails> displayBooks() throws Exception {
 		
@@ -29,13 +29,13 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 			connection=ConnectionUtil.getConnection();
 			stmt=connection.createStatement();
 			String sqlQuery="select * from book where active=1";
-			System.out.println(sqlQuery);
+			log.getInput(sqlQuery);
 			
 			
 			ResultSet rs=stmt.executeQuery(sqlQuery);
 			while(rs.next()) 
 			{
-				int bookId=rs.getInt("book_id");
+				int isbnNo=rs.getInt("isbn_no");
 				String bookName=rs.getString("book_name");
 				String authorName=rs.getString("author_name");
 				String pub=rs.getString("publisher");
@@ -45,7 +45,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 				int active=rs.getInt("active");
 				
 				
-				BookDetails bd = new BookDetails(bookId,bookName,authorName,pub,ver,category,language,active);
+				BookDetails bd = new BookDetails(isbnNo,bookName,authorName,pub,ver,category,language,active);
 				list.add(bd);
 			}
 			
@@ -54,17 +54,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(stmt!=null)
-			{
-				stmt.close();
-			}
-			if(connection!=null)
-			{
-				connection.close();
-			}
-		}
+		
 		
 		return list;
 	}
@@ -74,78 +64,49 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 
 	public void insertBookDetails(BookDetails bookDetail) throws Exception 
 	{
-		Connection connection=null;
-		PreparedStatement pst=null;
-		try
+		String sql=("insert into book(isbn_no,book_name,author_name,publisher,version_no,categories,languages)values(?,?,?,?,?,?,?)");
+		try(Connection connection=ConnectionUtil.getConnection();
+			PreparedStatement pst=connection.prepareStatement(sql);)
 		{
-			connection=ConnectionUtil.getConnection();
-			//Statement stmt=connection.createStatement();
-			String sql=("insert into book(book_id,book_name,author_name,publisher,version_no,categories,languages)values(book_id_seq1.nextval,?,?,?,?,?,?)");
-			pst=connection.prepareStatement(sql);
-			//pst.setInt(1, bookDetail.bookId);
-			pst.setString(1,bookDetail.getBookName());
-			pst.setString(2,bookDetail.authorName);
-			pst.setString(3,bookDetail.publisher);
-			pst.setInt(4, bookDetail.version);
-			pst.setString(5, bookDetail.categories);
-			pst.setString(6,bookDetail.languages);
+			
+			pst.setInt(1, bookDetail.isbnNo);
+			pst.setString(2,bookDetail.getBookName());
+			pst.setString(3,bookDetail.authorName);
+			pst.setString(4,bookDetail.publisher);
+			pst.setInt(5, bookDetail.version);
+			pst.setString(6, bookDetail.categories);
+			pst.setString(7,bookDetail.languages);
 			int row=pst.executeUpdate();
-			System.out.println(row+" row inserted");
-			System.out.println(sql);
+			log.getInput(row+" row inserted");
+			log.getInput(sql);
 		}
 		
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(connection!=null)
-			{
-				connection.close();
-			}
 		}
 		
 		//return null;
 	}
 
-	public void deleteBookDetails(int bookId) throws Exception 
+	public void deleteBookDetails(int isbnNo) throws Exception 
 	{
-		Connection connection=null;
-		PreparedStatement pst=null;
-		
-		try
-		{
-			//BookDetails b=new BookDetails(bookId);
-			connection=ConnectionUtil.getConnection();
-			String sql=("update book set active=0 where book_id=?");
-			pst=connection.prepareStatement(sql);
-			
-			pst.setInt(1,bookId);
+		String sql=("update book set active=0 where isbn_no=?");
+		try(Connection connection=ConnectionUtil.getConnection();
+				PreparedStatement pst=connection.prepareStatement(sql);
+				ResultSet rs=pst.executeQuery(sql);)
+		{	
+			pst.setInt(1,isbnNo);
 			
 			int row=pst.executeUpdate();
-			System.out.println(row+" row deleted");
-			
+			log.getInput(row+" row deleted");
+		
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(connection!=null)
-			{
-				connection.close();
-			}
-		}
+	
 		
 	}
 
@@ -155,16 +116,13 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	}
 
 	public int totalBooks() throws Exception {
-		Connection con=null;
-		Statement stmt=null;
+	
 		int count = 0;
-		try
-		{
-			con=ConnectionUtil.getConnection();
-			stmt=con.createStatement();
-			String sql="select sum(total_quantity)as total_books from stock_room";
-			System.out.println(sql);
-			ResultSet rs=stmt.executeQuery(sql);
+		String sql="select count(book_id)as total_books from stock_room";
+		try(Connection con=ConnectionUtil.getConnection();
+				Statement stmt=con.createStatement();
+				ResultSet rs=stmt.executeQuery(sql);)
+		{	
 			if(rs.next())
 			{
 				 count=rs.getInt("total_books");
@@ -174,17 +132,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(stmt!=null)
-			{
-				stmt.close();
-			}
-			if(con!=null)
-			{
-				con.close();
-			}
-		}
+	
 		return count;
 		
 	}
