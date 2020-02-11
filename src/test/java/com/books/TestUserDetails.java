@@ -5,8 +5,9 @@ import java.util.Scanner;
 
 import com.books.model.UserDetails;
 import com.books.dao.impl.*;
+import com.books.logger.Logger;
 public class TestUserDetails {
-
+private static final Logger log=Logger.getInstance();
 	public static void main(String[] args) throws Exception
 	{
 		UserDetailsDAOImpl m=new UserDetailsDAOImpl();		

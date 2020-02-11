@@ -5,12 +5,11 @@ import java.util.Scanner;
 
 import com.books.model.BookDetails;
 import com.books.dao.impl.BookDetailsDAOImpl;
+import com.books.logger.Logger;
 
 public class TestBookDetails
 {
-
-	//private static final int active = 1;
-
+	private static final Logger log=Logger.getInstance();
 	public static void main(String args[])throws Exception
 	{
 		BookDetailsDAOImpl k=new BookDetailsDAOImpl();

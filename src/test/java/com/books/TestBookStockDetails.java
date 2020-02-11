@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import com.books.model.BookStockDetails;
 import com.books.dao.impl.BookStockDetailsDAOImpl;
+import com.books.logger.Logger;
 
 public class TestBookStockDetails {
+	private static final Logger log=Logger.getInstance();
 
 	public static void main(String[] args) throws Exception 
 	{

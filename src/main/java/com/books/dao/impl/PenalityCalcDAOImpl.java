@@ -24,15 +24,16 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 	
 	public void calculateFineAmount() throws Exception {
 	
-	
-		
-			Connection con=ConnectionUtil.getConnection();
-			
+					
 			String sql="update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'";
 			log.getInput(sql);
-			Statement stmt =con.createStatement();
+			try(Connection con=ConnectionUtil.getConnection();Statement stmt =con.createStatement();){
 			int row=stmt.executeUpdate(sql);
 			log.getInput(row+" row updated");
+			}catch(Exception e)
+			{
+				
+			}
 }
 
 	public List<PenalityCalc> displayFineDetails() throws Exception {
@@ -220,16 +221,10 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		{
 			e.printStackTrace();
 		}
-			
 		
 		return list;
 		
-	
 	}
-
-	
-	
-	
 
 	public List<CalcCard> userCardCount() throws Exception
 	{
