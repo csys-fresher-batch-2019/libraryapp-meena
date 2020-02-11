@@ -9,7 +9,7 @@ public class ConnectionUtil
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","oracle");
-		log.getInput(connection);
+	//	log.getInput(connection);
 		return connection;		
 	}
 }
