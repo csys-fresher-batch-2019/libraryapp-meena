@@ -10,6 +10,7 @@ import com.books.model.CalcCard;
 import com.books.model.CategorySettings;
 import com.books.model.LanguageSettings;
 import com.books.model.PenalityCalc;
+import com.books.dao.impl.BookStockDetailsDAOImpl;
 import com.books.dao.impl.PenalityCalcDAOImpl;
 import com.books.logger.Logger;
 
@@ -17,6 +18,7 @@ public class TestPenalityCalc {
 	private static final Logger log=Logger.getInstance();
 	public static void main(String[] args) throws Exception {
 		PenalityCalcDAOImpl m=new PenalityCalcDAOImpl();
+		BookStockDetailsDAOImpl b=new BookStockDetailsDAOImpl();
 		//PenalityCalc obj=new PenalityCalc();
 		//Additional obj1=new Additional();
 		char s;
@@ -24,27 +26,31 @@ public class TestPenalityCalc {
 		do
 		{
 			log.getInput("Enter your choice");
-			log.getInput("1.Calculate Fine Amount");
+			//log.getInput("1.Calculate Fine Amount");
 			log.getInput("2.Update returned status");
 			log.getInput("3.Display Fine");
-			log.getInput("4.Update Due Date");
+			//log.getInput("4.Update Due Date\n");
+			log.getInput("Settings\n");
 			log.getInput("5.Set Book Limit");
 			log.getInput("6.Set Penality");
 			log.getInput("7.Set Count of Due Days");
 			log.getInput("8.Find count of each book");
 			log.getInput("9.Availablity cards for the each user");
-			log.getInput("10.Insert user-book details");
+			log.getInput("10.Insert user-book details\n");
+			log.getInput("Language Settings\n");
 			log.getInput("11.Insert new language");
 			log.getInput("12.Delete languages");
-			log.getInput("13.Display languages");
+			log.getInput("13.Display languages\n");
+			log.getInput("Category Settings\n");
 			log.getInput("14.Insert new category");
-			log.getInput("15.delete category");;
+			log.getInput("15.delete category");
 			log.getInput("16.Display categories");
+			log.getInput("17.set Popup");
 			int ch=k.nextInt();
 			switch(ch)
 			{
 			case 1:
-				m.calculateFineAmount();
+				//m.calculateFineAmount();
 				break;
 			case 2:
 				log.getInput("Enter the user id");
@@ -65,7 +71,7 @@ public class TestPenalityCalc {
 				//m.displayFineDetails();
 				break;
 			case 4:
-				m.updateDueDate();
+				//m.updateDueDate();
 				break;
 			case 5:
 				log.getInput("Enter the Limit:");
@@ -76,11 +82,13 @@ public class TestPenalityCalc {
 				log.getInput("Enter the penality amount per day:");
 				int count1=k.nextInt();
 				m.setPenality(count1);
+				m.updateFineAll();
 				break;
 			case 7:
 				log.getInput("Enter the count of due days:");
 				int count2=k.nextInt();
 				m.setDueDays(count2);
+				m.updateDueDateAll();
 				break;
 			case 8:
 				
@@ -107,6 +115,11 @@ public class TestPenalityCalc {
 				LocalDate issuedDate1=LocalDate.parse(issuedDate);
 				Date rd=Date.valueOf(issuedDate1);
 				m.insertUserBookDetails(bookId2,userId2,rd);
+				m.updateDueDate(bookId2,userId2);
+				m.calculateFineAmount(bookId2,userId2);
+				b.updateActive(bookId2);
+				
+				
 				break;
 			case 11:
 				log.getInput("Enter the language");
@@ -142,7 +155,9 @@ public class TestPenalityCalc {
 					log.getInput(categories);
 				}
 				break;
-				
+			case 17:
+				int popup=k.nextInt();
+				m.updatePopup(popup);
 			default:
 				log.getInput("Invalid choice");
 				break;

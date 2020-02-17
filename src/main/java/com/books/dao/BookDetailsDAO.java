@@ -13,4 +13,6 @@ public interface BookDetailsDAO
 	public void deleteBookDetails(int bookId)throws Exception;
 	
 	public int totalBooks()throws Exception;
+	
+	public int checkAdmin(String admin,String password)throws Exception;
 }

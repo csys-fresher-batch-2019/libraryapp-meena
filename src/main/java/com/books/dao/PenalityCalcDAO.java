@@ -12,11 +12,11 @@ import com.books.model.PenalityCalc;
 
 public interface PenalityCalcDAO {
 
-	public void calculateFineAmount()throws Exception;
+	public void calculateFineAmount(int bookId2,int userId2)throws Exception;
 	
 	public List<PenalityCalc>displayFineDetails()throws Exception;
 	
-	public void updateDueDate()throws Exception;
+	public void updateDueDate(int bookId2,int userId2)throws Exception;
 	
 	public void setBookLimit(int count)throws Exception;
 	
@@ -43,4 +43,10 @@ public interface PenalityCalcDAO {
 	public void deteleCategory(String category1)throws Exception;
 	
 	public List<CategorySettings>displayCategories()throws Exception;
+	
+	public void updateDueDateAll()throws Exception;
+	
+	public void updateFineAll()throws Exception;
+	
+	public void updatePopup(int popup)throws Exception;
 }

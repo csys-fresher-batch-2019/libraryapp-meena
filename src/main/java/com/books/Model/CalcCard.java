@@ -12,6 +12,10 @@ public class CalcCard {
 		this.remaining = remaining;
 	}
 
+	public CalcCard() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String toString() {
 		return "CalcCard [userId=" + userId + ", takenBooks=" + takenBooks + ", remaining=" + remaining + "]";

@@ -30,6 +30,10 @@ public class UserDetails {
 			this.gender = gender;
 		}
 
+	public UserDetails() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getUserId() {
 		return userId;
 	}

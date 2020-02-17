@@ -137,6 +137,42 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 		
 	}
 
+	@Override
+	public int checkAdmin(String admin, String password) throws Exception {
+		int status=0;
+		String sql="select * from admin where admin_name=?and admin_pwd=?";
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement pst=con.prepareStatement(sql);)
+		{
+			
+			pst.setString(1, admin);
+			pst.setString(2, password);
+
+			try(ResultSet rs=pst.executeQuery();)
+		{
+			if(rs.next()) {
+				status=1;
+				String adminName=rs.getString("admin_name");
+				log.getInput("Welcome "+adminName);
+				
+			}
+			else
+			{
+				log.getInput("Invalid Login");
+				
+			}
+		}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return status;
+	}
+
+	
+
 	
 }
 

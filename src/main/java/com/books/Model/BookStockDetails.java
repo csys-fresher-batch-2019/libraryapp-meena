@@ -5,6 +5,9 @@ public class BookStockDetails {
 	public int bookId;
 	public int isbnNo;
 	public int active=1;
+	public int totalBooks;
+	public int remaining;
+	public int issued;
 	
 	
 	
@@ -18,6 +21,12 @@ public class BookStockDetails {
 	public BookStockDetails() {
 		// TODO Auto-generated constructor stub
 	}
+	public BookStockDetails(int isbnNo2, int totalBooks) {
+		this.isbnNo=isbnNo2;
+		this.remaining=totalBooks;
+	}
+	
+	
 	public int getBookId() {
 		return bookId;
 	}
@@ -40,6 +49,7 @@ public class BookStockDetails {
 	public String toString() {
 		return "BookStockDetails [bookId=" + bookId + ", isbnNo=" + isbnNo + ", active=" + active + "]";
 	}
+	
 	
 	
 	

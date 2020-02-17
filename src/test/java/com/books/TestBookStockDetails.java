@@ -22,6 +22,9 @@ public class TestBookStockDetails {
 			log.getInput("1.Display Stocks");
 			log.getInput("2.Insert new stocks");
 			log.getInput("3.Update stock room");
+			log.getInput("4.Total stocks");
+			log.getInput("5.Indivdual Stocks");
+			log.getInput("6.Delete stock");
 			int ch=k.nextInt();
 			switch(ch)
 			{
@@ -43,6 +46,31 @@ public class TestBookStockDetails {
 				m.updateStockRoom();
 				//log.getInput("Updated");
 				break;
+			case 4:
+				List<BookStockDetails>totalStocks=m.totalStocks();
+				for (BookStockDetails totalStock : totalStocks)
+				{
+					log.getInput("ISBN Number:"+totalStock.isbnNo +""+"Total Stock:"+ totalStock.totalBooks);
+				}
+				
+				break;
+			case 5:
+				List<BookStockDetails>individualRemaining=m.individualRemaining();
+				
+				for(BookStockDetails stock:individualRemaining)
+				{
+					log.getInput("ISBN Number:"+stock.isbnNo+""+"Remaining:"+stock.remaining);
+				}
+				List<BookStockDetails>individualIssued=m.individualIssued();
+				for(BookStockDetails stocks:individualIssued)
+				{
+					log.getInput("ISBN Number:"+stocks.isbnNo+""+"Issued:"+stocks.issued);
+				}
+				break;
+			case 6:
+				log.getInput("Enter the book Id:");
+				int bookId=k.nextInt();
+				m.deleteStock(bookId);
 			default:
 					log.getInput("Invalid");
 					break;

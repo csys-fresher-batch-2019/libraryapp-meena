@@ -94,6 +94,12 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 		
 	}
 
+	@Override
+	public List<UserDetails> displayUserDetails(int userId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }
 

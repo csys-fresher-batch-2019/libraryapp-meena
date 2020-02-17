@@ -12,5 +12,15 @@ public interface BookStockDetailsDAO
 	public List<BookStockDetails> displayBookStockDetails()throws Exception;
 	
 	public void updateStockRoom()throws Exception;
+	
+	public List<BookStockDetails> totalStocks()throws Exception;
+	
+	public void updateActive(int bookId)throws Exception;
+	
+	public List<BookStockDetails>individualRemaining()throws Exception;
+	
+	public List<BookStockDetails>individualIssued()throws Exception;
+	
+	public void deleteStock(int bookId)throws Exception;
 
 }

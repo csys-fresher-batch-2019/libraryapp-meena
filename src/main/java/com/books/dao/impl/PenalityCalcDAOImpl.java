@@ -22,17 +22,20 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 	 private static final Logger log=Logger.getInstance(); 
 
 	
-	public void calculateFineAmount() throws Exception {
+	public void calculateFineAmount(int bookId2, int userId2) throws Exception {
 	
 					
-			String sql="update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'";
+			String sql="update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'and book_id=? and user_id=?";
 			log.getInput(sql);
-			try(Connection con=ConnectionUtil.getConnection();Statement stmt =con.createStatement();){
+			try(Connection con=ConnectionUtil.getConnection();PreparedStatement stmt =con.prepareStatement(sql);)
+			{
+			stmt.setInt(1,bookId2);	
+			stmt.setInt(2, userId2);
 			int row=stmt.executeUpdate(sql);
-			log.getInput(row+" row updated");
+			//log.getInput(row+" row updated");
 			}catch(Exception e)
 			{
-				
+				e.printStackTrace();
 			}
 }
 
@@ -82,15 +85,17 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		return list;
 	}
 
-	public void updateDueDate() throws Exception {
+	public void updateDueDate(int bookId2, int userId2) throws Exception {
 		
 			Connection con=ConnectionUtil.getConnection();
 			
-			String sql="update fine_calc set due_date=(issued_date+(select days from duedate))";
+			String sql="update fine_calc set due_date=(issued_date+(select days from duedate))where book_id=? and user_id=?";
 			log.getInput(sql);
-			Statement stmt =con.createStatement();
+			PreparedStatement stmt =con.prepareStatement(sql);
+			stmt.setInt(1, bookId2);
+			stmt.setInt(2, userId2);
 			int row=stmt.executeUpdate(sql);
-			log.getInput(row+" row updated");
+			//log.getInput(row+" row updated");
 			con.close();
 			stmt.close();
 		}
@@ -449,7 +454,61 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 
 	return null;
 	}
-}
+
+	@Override
+	public void updateDueDateAll() throws Exception{
+		
+			
+			Connection con=ConnectionUtil.getConnection();
+			
+			String sql="update fine_calc set due_date=(issued_date+(select days from duedate))";
+			log.getInput(sql);
+			PreparedStatement stmt =con.prepareStatement(sql);
+			
+			int row=stmt.executeUpdate(sql);
+			//log.getInput(row+" row updated");
+			con.close();
+			stmt.close();
+		}
+
+	@Override
+	public void updateFineAll() throws Exception {
+		String sql="update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'";
+		log.getInput(sql);
+		try(Connection con=ConnectionUtil.getConnection();PreparedStatement stmt =con.prepareStatement(sql);)
+		{
+		
+		int row=stmt.executeUpdate(sql);
+		//log.getInput(row+" row updated");
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+	}
+
+	@Override
+	public void updatePopup(int popup) throws Exception {
+		String sql="update popup set popup=?";
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement pst=con.prepareStatement(sql);)
+		{
+			pst.setInt(1, popup);
+			int row=pst.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	
+		
+	}
+
 
 
 
