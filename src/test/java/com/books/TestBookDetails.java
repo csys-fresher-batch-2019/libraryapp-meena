@@ -13,8 +13,6 @@ public class TestBookDetails
 	public static void main(String args[])throws Exception
 	{
 		BookDetailsDAOImpl k=new BookDetailsDAOImpl();
-		//BookDetails m=new BookDetails();
-		//BookDetails obj=new BookDetails();
 		BookDetails obj=new BookDetails();
 		Scanner sc=new Scanner(System.in);
 		char s;
@@ -28,15 +26,12 @@ public class TestBookDetails
 		{
 			do {
 				log.getInput("Enter your choice");
-				
-				log.getInput("1.Display book details");
-				log.getInput("2.Insert book detail");
-				log.getInput("3.Delete book detail");
-				log.getInput("4.Display total books in library");
+				log.getInput("1.Display book details\n2.Insert book detail\n3.Delete book detail\n4.Display total books in library");
 				int c=sc.nextInt();
 				switch(c) 
 				{
 				case 1:
+					k.updateTotalStock();
 					List<BookDetails> displayBooks = k.displayBooks();
 					for (BookDetails bookDetails : displayBooks) {
 						log.getInput(bookDetails);
@@ -44,34 +39,26 @@ public class TestBookDetails
 					break;
 				case 2:
 					log.getInput("Enter the ISBN number");
-					obj.isbnNo=sc.nextInt();
+					obj.setIsbnNo(sc.nextInt());
 					System.out.print("Enter BookName:");
-					obj.bookName=sc.next();
-				//	sc.nextLine();
+					obj.setBookName(sc.next());
 					System.out.print("Enter Author Name:");
-					obj.authorName=sc.next();
-					//sc.nextLine();
+					obj.setAuthorName(sc.next());
 					System.out.print("Enter publisher:");
-					obj.publisher=sc.next();
-					//sc.nextLine();
+					obj.setPublisher(sc.next());
 					System.out.print("Enter version:");
-					obj.version=sc.nextInt();
-					//sc.nextLine();
+					obj.setVersion(sc.nextInt());
 					System.out.print("Enter category:");
-					obj.categories=sc.next();
-					//sc.nextLine();
+					obj.setCategories(sc.next());
 					System.out.print("Enter language:");
-					obj.languages=sc.next();
-					//sc.nextLine();
-					//BookDetails obj=new BookDetails(bookName,authorName,publisher,version,category,language);
+					obj.setLanguages(sc.next());
 					log.getInput(obj);
-					k.insertBookDetails(obj);
+					int row=k.insertBookDetails(obj);
 					break;
 				case 3:
 					System.out.print("Enter the ISBN number");
 					int id=sc.nextInt();
-					
-					k.deleteBookDetails(id);
+						k.deleteBookDetails(id);
 					break;
 				case 4:
 					int tot=k.totalBooks();
@@ -85,10 +72,7 @@ public class TestBookDetails
 			     s=sc.next().charAt(0);
 				
 			}while(s=='y'||s=='Y');
-		
 		}
 			sc.close();
 		}
-	
 }
-

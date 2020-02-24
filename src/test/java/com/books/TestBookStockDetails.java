@@ -19,12 +19,7 @@ public class TestBookStockDetails {
 		
 		do {
 			log.getInput("Enter your choice");
-			log.getInput("1.Display Stocks");
-			log.getInput("2.Insert new stocks");
-			log.getInput("3.Update stock room");
-			log.getInput("4.Total stocks");
-			log.getInput("5.Indivdual Stocks");
-			log.getInput("6.Delete stock");
+			log.getInput("1.Display Stocks\n2.Insert new stocks\n3.Update stock room\n4.Total stocks\n5.Indivdual Stocks\n6.Delete stock");
 			int ch=k.nextInt();
 			switch(ch)
 			{
@@ -37,34 +32,29 @@ public class TestBookStockDetails {
 				break;
 			case 2:
 				log.getInput("Enter the ISBN number:");
-				obj.isbnNo=k.nextInt();
-				
-				//BookStockDetails omg=new BookStockDetails(bookId2,quantity2);
-				m.insertBookStockDetails(obj.isbnNo);
+				obj.setIsbnNo(k.nextInt());
+				m.insertBookStockDetails(obj.getIsbnNo());
 				break;
 			case 3:
 				m.updateStockRoom();
-				//log.getInput("Updated");
 				break;
 			case 4:
 				List<BookStockDetails>totalStocks=m.totalStocks();
 				for (BookStockDetails totalStock : totalStocks)
 				{
-					log.getInput("ISBN Number:"+totalStock.isbnNo +""+"Total Stock:"+ totalStock.totalBooks);
+					log.getInput("ISBN Number:"+totalStock.getIsbnNo() +""+"Total Stock:"+totalStock.getTotalBooks());
 				}
-				
 				break;
 			case 5:
 				List<BookStockDetails>individualRemaining=m.individualRemaining();
-				
 				for(BookStockDetails stock:individualRemaining)
 				{
-					log.getInput("ISBN Number:"+stock.isbnNo+""+"Remaining:"+stock.remaining);
+					log.getInput("ISBN Number:"+stock.getIsbnNo()+""+"Remaining:"+stock.getRemaining());
 				}
 				List<BookStockDetails>individualIssued=m.individualIssued();
 				for(BookStockDetails stocks:individualIssued)
 				{
-					log.getInput("ISBN Number:"+stocks.isbnNo+""+"Issued:"+stocks.issued);
+					log.getInput("ISBN Number:"+stocks.getIsbnNo()+""+"Issued:"+stocks.getIssued());
 				}
 				break;
 			case 6:
@@ -74,9 +64,7 @@ public class TestBookStockDetails {
 			default:
 					log.getInput("Invalid");
 					break;
-				
 			}
-			
 			log.getInput("Do you want to continue?(y/n)");
 			s=k.next().charAt(0);
 		}while(s=='y'||s=='Y');

@@ -3,16 +3,14 @@ package com.books.model;
 import java.sql.Date;
 
 public class PenalityCalc {
-	public int itemId;
-	public int bookId;
-	public int userId;
-	public Date issuedDate;
-	public Date dueDate;
-	public Date returnedDate;
-	public int fineAmount;
-	public String status;
-	//public int cnt;
-	
+	private int itemId;
+	private int bookId;
+	private int userId;
+	private Date issuedDate;
+	private Date dueDate;
+	private Date returnedDate;
+	private int fineAmount;
+	private String status;
 	public int getItemId() {
 		return itemId;
 	}
@@ -27,8 +25,9 @@ public class PenalityCalc {
 		this.fineAmount = fineAmount;
 		this.status = status;
 	}
-	//public PenalityCalc(String bookName, int cnt) {
-	//}
+	public PenalityCalc() {
+		// TODO Auto-generated constructor stub
+	}
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
@@ -80,22 +79,4 @@ public class PenalityCalc {
 				+ issuedDate + ", dueDate=" + dueDate + ", returnedDate=" + returnedDate + ", fineAmount=" + fineAmount
 				+ ", status=" + status + "]";
 	}
-	/*public PenalityCalc(int itemId, int bookId, int userId, Date issuedDate, Date dueDate, Date returnedDate,
-			int fineAmount, String status) {
-		super();
-		this.itemId = itemId;
-		this.bookId = bookId;
-		this.userId = userId;
-		this.issuedDate = issuedDate;
-		this.dueDate = dueDate;
-		this.returnedDate = returnedDate;
-		this.fineAmount = fineAmount;
-		this.status = status;
-	}
-	public PenalityCalc() {
-		// TODO Auto-generated constructor stub
-	}*/
-		
-	
-	
 }

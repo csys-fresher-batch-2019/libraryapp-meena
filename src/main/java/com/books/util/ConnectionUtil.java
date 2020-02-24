@@ -8,7 +8,6 @@ import com.books.logger.Logger;
 public class ConnectionUtil
 {
 	private static final Logger log=Logger.getInstance();
-	
 	public static Connection getConnection()throws Exception
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");

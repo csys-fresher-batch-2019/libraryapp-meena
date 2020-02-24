@@ -1,32 +1,44 @@
 package com.books.model;
-
 public class BookStockDetails {
-	//public int isbnNo;
-	public int bookId;
-	public int isbnNo;
-	public int active=1;
-	public int totalBooks;
-	public int remaining;
-	public int issued;
 	
-	
-	
-	
+	private int bookId;
+	private int isbnNo;
+	private int active=1;
+	private int totalBooks;
+	private int remaining;
+	private int issued;
 	public BookStockDetails(int bookId, int isbnNo, int active) {
-		
 		this.bookId = bookId;
 		this.isbnNo = isbnNo;
 		this.active = active;
 	}
+	public int getTotalBooks() {
+		return totalBooks;
+	}
+	public void setTotalBooks(int totalBooks) {
+		this.totalBooks = totalBooks;
+	}
+	public int getRemaining() {
+		return remaining;
+	}
+	public void setRemaining(int remaining) {
+		this.remaining = remaining;
+	}
+	public int getIssued() {
+		return issued;
+	}
+	public void setIssued(int issued) {
+		this.issued = issued;
+	}
+	
+	public BookStockDetails(int isbnNo2, int totalBooks) {
+		this.setIsbnNo(isbnNo2);
+		this.setRemaining(totalBooks);
+	}
+
 	public BookStockDetails() {
 		// TODO Auto-generated constructor stub
 	}
-	public BookStockDetails(int isbnNo2, int totalBooks) {
-		this.isbnNo=isbnNo2;
-		this.remaining=totalBooks;
-	}
-	
-	
 	public int getBookId() {
 		return bookId;
 	}
@@ -48,21 +60,5 @@ public class BookStockDetails {
 	@Override
 	public String toString() {
 		return "BookStockDetails [bookId=" + bookId + ", isbnNo=" + isbnNo + ", active=" + active + "]";
+	}	
 	}
-	
-	
-	
-	
-	/*public BookStockDetails(int bookStockId, int bookId, int quantity,int issuedBooks) {
-		//super();
-		this.bookStockId = bookStockId;
-		this.bookId = bookId;
-		this.quantity = quantity;
-		this.issuedBooks=issuedBooks;
-	}*/
-
-		
-	}
-
-	
-	

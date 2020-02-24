@@ -26,38 +26,29 @@ public class UserDAOImpl implements UserDAO
 		{
 			pst.setInt(1, userId);
 			ResultSet rs=pst.executeQuery();
-			if(rs.next()) {
+			int flag=0;
 				while(rs.next())
 				{
+					flag=1;
 					int bookId=rs.getInt("book_id");
-					//int userId=rs.getString("user_id")
 					Date issuedDate=rs.getDate("issued_date");
 					Date returnedDate=rs.getDate("returned_date");
 					Date dueDate=rs.getDate("due_date");
 					int fineAmount=rs.getInt("fine_amount");
 					String status=rs.getString("status");
-					
 					User u=new User(bookId,issuedDate,dueDate,returnedDate,fineAmount,status);
-					list.add(u);
-					
+					list.add(u);	
 				}
-			}
-				
-				else
+			
+				if(flag==0)
 				{
 					log.getInput("No history");
 				}
-				
 			}
-			
-			
-			
-		
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
 		return list;
 	}
 
@@ -67,21 +58,14 @@ public class UserDAOImpl implements UserDAO
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
 		{
-			
 			pst.setString(1, email);
 			pst.setString(2, password);
-
 			try(ResultSet rs=pst.executeQuery();)
 		{
-			
-			
-			
 			if(rs.next()) {
 			uid=rs.getInt("user_id");
 				String uname=rs.getString("user_name");
 				log.getInput("Welcome "+uname);
-				
-				
 			}
 			else
 			{
@@ -94,7 +78,6 @@ public class UserDAOImpl implements UserDAO
 			e.printStackTrace();
 		}
 		return uid;
-		
 	}
 
 	@Override
@@ -106,38 +89,31 @@ public class UserDAOImpl implements UserDAO
 		{
 			pst.setInt(1, userId);
 			ResultSet rs=pst.executeQuery();
-			if(rs.next())
-			{
+			int flag=0;
 				while(rs.next())
 				{
+					flag=1;
 					int bookId=rs.getInt("book_id");
 					Date issuedDate=rs.getDate("issued_date");
 					Date returnedDate=rs.getDate("returned_date");
 					Date dueDate=rs.getDate("due_date");
 					int fineAmount=rs.getInt("fine_amount");
 					String status=rs.getString("status");
-					
 					User u=new User(bookId,issuedDate,dueDate,returnedDate,fineAmount,status);
 					list.add(u);
+				}
+		if(flag==0)
+		{
+			log.getInput("No current Books in your account");
 					
-				}
 			}
-				else
-				{
-					log.getInput("No current Books in your account");
-				}
-
-				
-			}
+		}
 						
-		
-		catch(Exception e)
+catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
 		return list;
-
 	}
 
 	@Override
@@ -158,10 +134,9 @@ public class UserDAOImpl implements UserDAO
 					int ver=rs.getInt("version_no");
 					String category=rs.getString("categories");
 					String language=rs.getString("languages");
-					int active=rs.getInt("active");
-					
-					
-					BookDetails bd = new BookDetails(isbnNo,bookName1,authorName,pub,ver,category,language,active);
+					int totalBooks=rs.getInt("total_stocks");
+					int active=rs.getInt("active");			
+					BookDetails bd = new BookDetails(isbnNo,bookName1,authorName,pub,ver,category,language,totalBooks,active);
 					list.add(bd);
 			}
 		}
@@ -192,10 +167,9 @@ public class UserDAOImpl implements UserDAO
 				int ver=rs.getInt("version_no");
 				String category=rs.getString("categories");
 				String language=rs.getString("languages");
+				int totalBooks=rs.getInt("total_stocks");
 				int active=rs.getInt("active");
-				
-				
-				BookDetails bd = new BookDetails(isbnNo,bookName,authorName,pub,ver,category,language,active);
+				BookDetails bd = new BookDetails(isbnNo,bookName,authorName,pub,ver,category,language,totalBooks,active);
 				list.add(bd);
 		}
 		}
@@ -211,24 +185,20 @@ public class UserDAOImpl implements UserDAO
 	public List<CalcCard> remainingCard(int userId) throws Exception {
 		CalcCard c=new CalcCard();
 		List<CalcCard>list=new ArrayList<CalcCard>();
-		String sql="select distinct user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from fine_calc where user_id=?";
+		String sql="select distinct user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users where user_id=?";
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
-				
 		{
 			pst.setInt(1, userId);
-			
 			try(ResultSet rs=pst.executeQuery();)
 {
-				//c.userId=rs.getInt("user_id");
 				if(rs.next())
 				{
-				c.takenBooks=rs.getInt(2);
-				c.remaining=rs.getInt(3);
+				c.setTakenBooks(rs.getInt(2));
+				c.setRemaining(rs.getInt(3));
 				}
 				list.add(c);
-}
-			
+}		
 		}			
 		catch(Exception e)
 		{
@@ -238,53 +208,57 @@ public class UserDAOImpl implements UserDAO
 	}
 
 	@Override
-	public void updatePhoneNumber(int userId, long phoneNumber) throws Exception {
+	public int updatePhoneNumber(int userId, long phoneNumber) throws Exception {
 		String sql="update users set ph_no=? where user_id=?";
+		int row=0;
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
 		{
 			pst.setLong(1, phoneNumber);
 			pst.setInt(2,userId);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
+		return row;
 	}
 
 	@Override
-	public void updateAddress(int userId, String address) throws Exception {
+	public int updateAddress(int userId, String address) throws Exception {
 		String sql="update users set address=? where user_id=?";
+		int row=0;
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
 		{
 			pst.setString(1, address);
 			pst.setInt(2,userId);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
+		return row;
 	}
 
 	@Override
-	public void changePassword(int userId, String password) throws Exception {
+	public int changePassword(int userId, String password) throws Exception {
 		String sql="update users set password=? where user_id=?";
+		int row=0;
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
 		{
 			pst.setString(1, password);
 			pst.setInt(2,userId);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		return row;
 	}
 
 	@Override
@@ -306,10 +280,8 @@ public class UserDAOImpl implements UserDAO
 					Date dueDate=rs.getDate("due_date");
 					int fineAmount=rs.getInt("fine_amount");
 					String status=rs.getString("status");
-					
 					User u=new User(bookId,issuedDate,dueDate,returnedDate,fineAmount,status);
 					list.add(u);
-					
 				}
 
 			}
@@ -343,7 +315,6 @@ public class UserDAOImpl implements UserDAO
 				{
 					status=1;
 					s.remainingCard(userId);
-
 				}
 				else
 				{
@@ -362,17 +333,8 @@ public class UserDAOImpl implements UserDAO
 			{
 				e.printStackTrace();
 			}
-			
-			
 		}
 		return status;
-	}	
-	
 	}
 
-	
-	
-
-		
-
-
+	}

@@ -21,7 +21,6 @@ public class TestUser {
 		String email=sc.next();
 		log.getInput("Enter the password");
 		String password=sc.next();
-		
 		int userId=m.checkLogin(email, password);
 		System.out.println(userId);
 		if(userId!=0)
@@ -29,14 +28,7 @@ public class TestUser {
 			do
 			{
 				log.getInput("Enter your choice:");
-				log.getInput("1.History");
-				log.getInput("2.Current Books");
-				log.getInput("3.Search Books by Book Name");
-				log.getInput("4.Search Books by Author Name");
-				log.getInput("5.Availablity cards");
-				log.getInput("6.Settings");
-				log.getInput("7.Due check");
-				
+				log.getInput("1.History\n2.Current Books\n3.Search Books by Book Name\n4.Search Books by Author Name\n5.Availablity cards\n6.Settings\n7.Due check");
 				int ch=sc.nextInt();
 				switch(ch)
 				{
@@ -64,7 +56,6 @@ public class TestUser {
 					}
 					break;
 				case 4:
-				
 					log.getInput("Enter the author Name");
 					String authorName=sc.next();
 					List<BookDetails>book=m.searchBookName(authorName);
@@ -80,15 +71,12 @@ public class TestUser {
 						List<CalcCard>card=m.remainingCard(userId);
 						for(CalcCard cards:card)
 						{
-							log.getInput("Taken Cards:"+cards.takenBooks+""+"Remaining:"+cards.remaining);
+							log.getInput("Taken Cards:"+cards.getTakenBooks()+""+"Remaining:"+cards.getRemaining());
 						}
-						
 					}
 					break;
 				case 6:
-					log.getInput("1.Change Phone number");
-					log.getInput("2.Change address");
-					log.getInput("3.Change password");
+					log.getInput("1.Change Phone number\n2.Change address\n3.Change password");
 					int choice=sc.nextInt();
 					switch(choice) {
 					case 1:
@@ -112,28 +100,20 @@ public class TestUser {
 					}
 					break;
 				case 7:
-					
 					List<User>dueBooks=m.dueDateCheck(userId);
 					for(User dueBook:dueBooks)
 					{
 						log.getInput(dueBook);
 					}
 					break;
-					
 				default:
 					log.getInput("Invalid Choice");
 					break;
 				}
 				log.getInput("Do you want to continue?(Y/N)");
 				s=sc.next().charAt(0);
-			}while(s=='Y'||s=='y');
-			
-			
+			}while(s=='Y'||s=='y');	
 		}
-		
-		
 		sc.close();
-
 	}
-
 }

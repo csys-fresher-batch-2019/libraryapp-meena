@@ -16,14 +16,10 @@ private static final Logger log=Logger.getInstance();
 		
 		do {
 			log.getInput("Enter your choice");
-			log.getInput("1.Enter the user details");
-			log.getInput("2.Display user details");
-			log.getInput("3.Delete user details");
-			int ch=t.nextInt();
-			
-			switch(ch){
+			log.getInput("1.Enter the user details\n2.Display user details\n3.Delete user details");
+			int ch=t.nextInt();			
+		switch(ch){
 			case 1:
-				
 				log.getInput("Enter the user name:");
 				String userName=t.next();
 				log.getInput("Enter the address:");
@@ -49,7 +45,7 @@ private static final Logger log=Logger.getInstance();
 			case 3:
 				log.getInput("Enter the user Id");
 				int userId=t.nextInt();
-				m.deleteUserDetails( userId);
+				int row=m.deleteUserDetails( userId);
 				break;
 			default:
 				log.getInput("Invalid option");
@@ -57,7 +53,6 @@ private static final Logger log=Logger.getInstance();
 			}
 			log.getInput("Do you want to continue (y/n)");
 			 k=t.next().charAt(0);
-
 		}while(k=='y'||k=='Y');
 	t.close();			
 	}

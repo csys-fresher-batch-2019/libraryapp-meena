@@ -1,7 +1,5 @@
 package com.books.dao.impl;
 
-import java.sql.Statement;
-import java.time.LocalDate;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -19,7 +17,7 @@ import com.books.dao.PenalityCalcDAO;
 import com.books.logger.Logger;
 
 public class PenalityCalcDAOImpl implements PenalityCalcDAO{
-	 private static final Logger log=Logger.getInstance(); 
+ private static final Logger log=Logger.getInstance(); 
 
 	
 	public void calculateFineAmount(int bookId2, int userId2) throws Exception {
@@ -31,176 +29,120 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 			{
 			stmt.setInt(1,bookId2);	
 			stmt.setInt(2, userId2);
-			int row=stmt.executeUpdate(sql);
-			//log.getInput(row+" row updated");
-			}catch(Exception e)
+			int row=stmt.executeUpdate();
+			}
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
 }
 
 	public List<PenalityCalc> displayFineDetails() throws Exception {
-		Connection connection=null;
-		Statement stmt=null;
+		String sql="select *from fine_calc";
 		List<PenalityCalc> list = new ArrayList<PenalityCalc>();
-		try
+		try(Connection connection=ConnectionUtil.getConnection();
+				PreparedStatement pst=connection.prepareStatement(sql))
 		{
-			connection=ConnectionUtil.getConnection();
-			stmt=connection.createStatement();
-			String sql="select *from fine_calc";
-			
-			ResultSet rs=stmt.executeQuery(sql);
-			while(rs.next()) 
+			try(ResultSet rs=pst.executeQuery())
 			{
-				int itemId=rs.getInt("item_id");
-				int bookId=rs.getInt("book_id");
-				int userId=rs.getInt("user_id");
-				Date issuedDate=rs.getDate("issued_date");
-				Date dueDate=rs.getDate("due_date");
-				Date returnedDate=rs.getDate("returned_date");
-				int fineAmount=rs.getInt("fine_amount");
-				String status=rs.getString("status");
-				
-				PenalityCalc bd = new PenalityCalc(itemId,bookId,userId,issuedDate,dueDate,returnedDate,fineAmount,status);
-				list.add(bd);
-			}
+				while(rs.next()) 
+				{
+					int itemId=rs.getInt("item_id");
+					int bookId=rs.getInt("book_id");
+					int userId=rs.getInt("user_id");
+					Date issuedDate=rs.getDate("issued_date");
+					Date dueDate=rs.getDate("due_date");
+					Date returnedDate=rs.getDate("returned_date");
+					int fineAmount=rs.getInt("fine_amount");
+					String status=rs.getString("status");
+					
+					PenalityCalc bd = new PenalityCalc(itemId,bookId,userId,issuedDate,dueDate,returnedDate,fineAmount,status);
+					list.add(bd);
+				}
+			}	
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-			
-		finally
-		{
-			if(stmt!=null)
-			{
-				stmt.close();
-			}
-			if(connection!=null)
-			{
-				connection.close();
-			}
-		}
-		
+		}	
 		return list;
 	}
 
 	public void updateDueDate(int bookId2, int userId2) throws Exception {
 		
-			Connection con=ConnectionUtil.getConnection();
-			
-			String sql="update fine_calc set due_date=(issued_date+(select days from duedate))where book_id=? and user_id=?";
+		String sql="update fine_calc set due_date=(issued_date+(select days from duedate))where book_id=? and user_id=?";
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement stmt =con.prepareStatement(sql);)	
+		{
 			log.getInput(sql);
-			PreparedStatement stmt =con.prepareStatement(sql);
+			
 			stmt.setInt(1, bookId2);
 			stmt.setInt(2, userId2);
-			int row=stmt.executeUpdate(sql);
-			//log.getInput(row+" row updated");
+			int row=stmt.executeUpdate();
 			con.close();
 			stmt.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}			
 		}
 		
 	
 
-	public void setBookLimit(int count) throws Exception {
-		Connection con=null;
-		PreparedStatement pst=null;
-		try
+	public int setBookLimit(int count) throws Exception {
+		String sql="update allocated set allocated_count=?";
+		int row=0;
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement pst=con.prepareStatement(sql))
 		{
-			con=ConnectionUtil.getConnection();
-			
-			String sql="update allocated set allocated_count=?";
 			log.getInput(sql);
-			pst =con.prepareStatement(sql);
 			pst.setInt(1,count);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row updated");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(con!=null)
-			{
-				con.close();
-			}
-		}
-
-		
+		return row;
 	}
 
-	public void setPenality(int amount) throws Exception {
+	public int setPenality(int amount) throws Exception {
 		
-		Connection con=null;
-		PreparedStatement pst=null;
-		try
+		int row=0;
+		String sql="update fine_table set fine_amount=?";
+		try(Connection con=ConnectionUtil.getConnection();
+			PreparedStatement pst=con.prepareStatement(sql);)
 		{
-			con=ConnectionUtil.getConnection();
-			
-			String sql="update fine_table set fine_amount=?";
 			log.getInput(sql);
-			pst =con.prepareStatement(sql);
 			pst.setInt(1,amount);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row updated");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(con!=null)
-			{
-				con.close();
-			}
-		}
-
-
-		
+		return row;	
 	}
 
-	public void setDueDays(int days) throws Exception {
-		Connection con=null;
-		PreparedStatement pst=null;
-		try
+	public int setDueDays(int days) throws Exception {
+		String sql="update duedate set days=?";
+		int row=0;
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement pst=con.prepareStatement(sql);)
 		{
-			con=ConnectionUtil.getConnection();
-			
-			String sql="update duedate set days=?";
 			log.getInput(sql);
-			pst =con.prepareStatement(sql);
 			pst.setInt(1,days);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row updated");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if(pst!=null)
-			{
-				pst.close();
-			}
-			if(con!=null)
-			{
-				con.close();
-			}
-		}
-
-		
+		return row;	
 	}
 
 	
@@ -213,7 +155,6 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 			PreparedStatement pst=connection.prepareStatement(sql);
 			ResultSet rs=pst.executeQuery();)
 		{
-			
 			while(rs.next()) 
 			{
 				int isbn_no=rs.getInt("isbn_no");
@@ -233,7 +174,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 
 	public List<CalcCard> userCardCount() throws Exception
 	{
-		String sql="select user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from fine_calc group by user_id";
+		String sql="select user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users group by user_id";
 		List<CalcCard>list=new ArrayList<CalcCard>();
 		try(Connection connection=ConnectionUtil.getConnection();
 				PreparedStatement pst=connection.prepareStatement(sql);
@@ -250,44 +191,37 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 			}
 		return list;
 		}
-		
-		
-		
-		
 	}
 
-	public void updateReturnStatus(int bookId,int userId,LocalDate returnedDate) throws Exception
+	public int updateReturnStatus(int bookId,int userId,Date returnedDate) throws Exception
 	{
+		int row=0;
 		String sql="update fine_calc set returned_date=?,status='Returned', fine_amount=fine_amount-fine_amount where book_id=? and user_id=? and status='Issued'";
 		try(Connection connection=ConnectionUtil.getConnection();
 			PreparedStatement pst=connection.prepareStatement(sql);)
 		{
-			
-			Date rd=Date.valueOf(returnedDate);
-			pst.setDate(1,rd);
+			pst.setDate(1,returnedDate);
 			pst.setInt(2, bookId);
 			pst.setInt(3, userId);
-			int row=pst.executeUpdate();
-			log.getInput(row+" row updated");
-			
+			row=pst.executeUpdate();
+			log.getInput(row+" row updated");	
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
+		return row;
 	}
 
 	
 
-	public void insertUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
-		
+	public int insertUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
+		int row=0;
 		String str1="select isbn_no  from stock_room sr,fine_calc fc where sr.book_id = fc.book_id and user_id=? and isbn_no = (select isbn_no  from stock_room where book_id =?)";
 		String sql="insert into fine_calc(item_id,book_id,user_id,issued_date)values(item_id1_seq3.nextval,?,?,?)";
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst1=con.prepareStatement(str1);)
 		{
-			
 			pst1.setInt(1,userId);
 			pst1.setInt(2,bookId);
 			ResultSet rs=pst1.executeQuery();
@@ -299,12 +233,10 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 			{
 			
 			PreparedStatement pst=con.prepareStatement(sql);
-			
-			
 			pst.setInt(1, bookId);
 			pst.setInt(2, userId);
 			pst.setDate(3,issuedDate);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row updated");
 			}
 		}
@@ -312,48 +244,44 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		{
 			e.printStackTrace();
 		}
-		
-		
+		return row;
 		
 	}
 
-	public void insertNewLanguage(String language) throws Exception 
+	public int insertNewLanguage(String language) throws Exception 
 	{
+		int row=0;
 		String sql="insert into languages(languages) values(?)";
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst=con.prepareStatement(sql);)
 		{
-			
 			pst.setString(1, language);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row inserted");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
-		
+		return row;
 	}
 
-	public void deleteLanguage(String language1) throws Exception 
+	public int deleteLanguage(String language1) throws Exception 
 	{
 		String sql="update languages set active=0 where languages=?";
-		
+		int row=0;
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst=con.prepareStatement(sql);)
 		{
-			
 			pst.setString(1, language1);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row deleted");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-			
-		
+		}	
+		return row;
 	}
 
 	public List<LanguageSettings> displayLanguages() throws Exception
@@ -362,8 +290,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		String sql="select * from languages where active=1";
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst=con.prepareStatement(sql);
-			
-			ResultSet rs=pst.executeQuery(sql);)		{
+			ResultSet rs=pst.executeQuery(sql))		{
 			while(rs.next())
 				{
 				String language=rs.getString("languages");
@@ -381,94 +308,78 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		return null;
 	}
 
-	public void insertNewCategory(String category) throws Exception
+	public int insertNewCategory(String category) throws Exception
 	{
 		String sql="insert into category(categories)values(?)";
-		
+		int row=0;
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst=con.prepareStatement(sql);)
 		{
 			pst.setString(1, category);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row inserted");
-			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
-		
+		return row;
 	}
 
-	public void deteleCategory(String category1) throws Exception
+	public int deteleCategory(String category1) throws Exception
 	{
+		int row=0;
 		String sql="update category set active=0 where categories=?";
 		try(Connection con=ConnectionUtil.getConnection();
 				PreparedStatement pst=con.prepareStatement(sql);)
 		{
 			pst.setString(1, category1);
-			int row=pst.executeUpdate();
+			row=pst.executeUpdate();
 			log.getInput(row+" row deleted");
-			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-	}
+		return row;
+		}
 
 	public List<CategorySettings> displayCategories() throws Exception {
 		List<CategorySettings>list=new ArrayList<CategorySettings>();
-		
 		String sql="select * from category where active=1";
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst=con.prepareStatement(sql);
 				ResultSet rs=pst.executeQuery(sql);)
 		{
-			
-			
-			
 			while(rs.next())
 				{
 				String category=rs.getString("categories");
-				
-				
 				CategorySettings d=new CategorySettings(category);
 				list.add(d);
 				}
-			return list;
-			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
-	
-	
-
-	return null;
+		return list;
 	}
 
 	@Override
 	public void updateDueDateAll() throws Exception{
-		
 			
-			Connection con=ConnectionUtil.getConnection();
-			
-			String sql="update fine_calc set due_date=(issued_date+(select days from duedate))";
+		String sql="update fine_calc set due_date=(issued_date+(select days from duedate))";
+		try(Connection con=ConnectionUtil.getConnection();
+				PreparedStatement stmt =con.prepareStatement(sql);)
+		{
 			log.getInput(sql);
-			PreparedStatement stmt =con.prepareStatement(sql);
-			
 			int row=stmt.executeUpdate(sql);
-			//log.getInput(row+" row updated");
 			con.close();
 			stmt.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}	
 		}
 
 	@Override
@@ -483,9 +394,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-
-		
+		}	
 	}
 
 	@Override
@@ -500,23 +409,6 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-		
-		
+		}		
 	}
-
-	
-		
-	}
-
-
-
-
-	
-
-
-	
-
-	
-	
-
+}
