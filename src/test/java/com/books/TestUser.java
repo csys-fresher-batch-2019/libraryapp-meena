@@ -10,6 +10,7 @@ import com.books.model.BookDetails;
 import com.books.model.CalcCard;
 import com.books.model.User;
 
+
 public class TestUser {
 	private static final Logger log=Logger.getInstance();
 	public static void main(String[] args) throws Exception {

@@ -3,9 +3,9 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.model.UserDetails;
-import com.books.dao.impl.*;
+import com.books.dao.impl.UserDetailsDAOImpl;
 import com.books.logger.Logger;
+import com.books.model.UserDetails;
 public class TestUserDetails {
 private static final Logger log=Logger.getInstance();
 	public static void main(String[] args) throws Exception

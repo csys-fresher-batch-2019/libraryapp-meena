@@ -3,10 +3,9 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.model.BookStockDetails;
 import com.books.dao.impl.BookStockDetailsDAOImpl;
 import com.books.logger.Logger;
-
+import com.books.model.BookStockDetails;
 public class TestBookStockDetails {
 	private static final Logger log=Logger.getInstance();
 

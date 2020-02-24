@@ -3,9 +3,9 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.model.BookDetails;
 import com.books.dao.impl.BookDetailsDAOImpl;
 import com.books.logger.Logger;
+import com.books.model.BookDetails;
 
 public class TestBookDetails
 {

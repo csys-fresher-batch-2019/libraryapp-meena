@@ -5,14 +5,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import com.books.dao.impl.BookStockDetailsDAOImpl;
+import com.books.dao.impl.PenalityCalcDAOImpl;
+import com.books.logger.Logger;
 import com.books.model.Additional;
 import com.books.model.CalcCard;
 import com.books.model.CategorySettings;
 import com.books.model.LanguageSettings;
 import com.books.model.PenalityCalc;
-import com.books.dao.impl.BookStockDetailsDAOImpl;
-import com.books.dao.impl.PenalityCalcDAOImpl;
-import com.books.logger.Logger;
 
 public class TestPenalityCalc {
 	private static final Logger log=Logger.getInstance();
