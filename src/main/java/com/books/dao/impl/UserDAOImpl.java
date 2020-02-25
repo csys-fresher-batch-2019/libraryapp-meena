@@ -274,7 +274,9 @@ catch(Exception e)
 			{
 				while(rs.next())
 				{
+					
 					int bookId=rs.getInt("book_id");
+					
 					Date issuedDate=rs.getDate("issued_date");
 					Date returnedDate=rs.getDate("returned_date");
 					Date dueDate=rs.getDate("due_date");
