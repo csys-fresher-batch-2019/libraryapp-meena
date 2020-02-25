@@ -11,7 +11,7 @@ public class ConnectionUtil
 	public static Connection getConnection()throws Exception
 	{
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@13.235.147.120:1521:XE","meenakshi","meenakshi");
+		Connection connection=DriverManager.getConnection("jdbc:oracle:thin:@localhost","system","oracle");
 		log.getInput(connection);
 		return connection;		
 	}

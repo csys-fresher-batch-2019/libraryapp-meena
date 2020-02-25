@@ -218,7 +218,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO{
 	public int insertUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
 		int row=0;
 		String str1="select isbn_no  from stock_room sr,fine_calc fc where sr.book_id = fc.book_id and user_id=? and isbn_no = (select isbn_no  from stock_room where book_id =?)";
-		String sql="insert into fine_calc(item_id,book_id,user_id,issued_date)values(item_id1_seq3.nextval,?,?,?)";
+		String sql="insert into fine_calc(item_id,book_id,user_id,issued_date)values(item_id_seq.nextval,?,?,?)";
 		try(Connection con=ConnectionUtil.getConnection();
 			PreparedStatement pst1=con.prepareStatement(str1);)
 		{
