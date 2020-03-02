@@ -1,98 +1,91 @@
 package com.books;
 
-
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.impl.UserDAOImpl;
+import com.books.dao.UserDAO;
+import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.BookDetails;
 import com.books.model.CalcCard;
 import com.books.model.User;
 
-
 public class TestUser {
-	private static final Logger log=Logger.getInstance();
+	private static final Logger log = Logger.getInstance();
+
 	public static void main(String[] args) throws Exception {
-		UserDAOImpl m=new UserDAOImpl();
-		
-		Scanner sc=new Scanner(System.in);
+		UserDAO m = DAOFactory.getUserDAO();
+
+		Scanner sc = new Scanner(System.in);
 		char s;
 		log.getInput("Enter the email");
-		String email=sc.next();
+		String email = sc.next();
 		log.getInput("Enter the password");
-		String password=sc.next();
-		int userId=m.checkLogin(email, password);
+		String password = sc.next();
+		int userId = m.checkLogin(email, password);
 		System.out.println(userId);
-		if(userId!=0)
-		{
-			do
-			{
+		if (userId != 0) {
+			do {
 				log.getInput("Enter your choice:");
-				log.getInput("1.History\n2.Current Books\n3.Search Books by Book Name\n4.Search Books by Author Name\n5.Availablity cards\n6.Settings\n7.Due check");
-				int ch=sc.nextInt();
-				switch(ch)
-				{
+				log.getInput(
+						"1.History\n2.Current Books\n3.Search Books by Book Name\n4.Search Books by Author Name\n5.Availablity cards\n6.Settings\n7.Due check");
+				int ch = sc.nextInt();
+				switch (ch) {
 				case 1:
-					List<User>user=m.viewHistory(userId);
-					for(User users:user)
-					{
+					List<User> user = m.viewHistory(userId);
+					for (User users : user) {
 						log.getInput(users);
 					}
 					break;
 				case 2:
-					List<User>users=m.currentBooks(userId);
-					for(User user1:users)
-					{
+					List<User> users = m.currentBooks(userId);
+					for (User user1 : users) {
 						log.getInput(user1);
 					}
 					break;
 				case 3:
 					log.getInput("Enter the book Name");
-					String bookName=sc.next();
-					List<BookDetails>bookDetails=m.searchBookName(bookName);
-					for(BookDetails book:bookDetails)
-					{
+					String bookName = sc.next();
+					List<BookDetails> bookDetails = m.searchBookName(bookName);
+					for (BookDetails book : bookDetails) {
 						log.getInput(book);
 					}
 					break;
 				case 4:
 					log.getInput("Enter the author Name");
-					String authorName=sc.next();
-					List<BookDetails>book=m.searchBookName(authorName);
-					for(BookDetails books:book)
-					{
+					String authorName = sc.next();
+					List<BookDetails> book = m.searchBookName(authorName);
+					for (BookDetails books : book) {
 						log.getInput(books);
 					}
 					break;
 				case 5:
-					int status=m.checkAvailable(userId);
-					if(status!=0)
-					{
-						List<CalcCard>card=m.remainingCard(userId);
-						for(CalcCard cards:card)
-						{
-							log.getInput("Taken Cards:"+cards.getTakenBooks()+""+"Remaining:"+cards.getRemaining());
+					int status = m.checkAvailable(userId);
+					if (status != 0) {
+						List<CalcCard> card = m.remainingCard(userId);
+						for (CalcCard cards : card) {
+							log.getInput(
+									"Taken Cards:" + cards.getTakenBooks() + "" + "Remaining:" + cards.getRemaining());
 						}
 					}
 					break;
 				case 6:
 					log.getInput("1.Change Phone number\n2.Change address\n3.Change password");
-					int choice=sc.nextInt();
-					switch(choice) {
+					int choice = sc.nextInt();
+					switch (choice) {
 					case 1:
 						log.getInput("Enter your new phone number:");
-						long phoneNumber=sc.nextLong();
+						long phoneNumber = sc.nextLong();
 						m.updatePhoneNumber(userId, phoneNumber);
 						break;
 					case 2:
 						log.getInput("Enter the address:");
-						String address=sc.next();
+						String address = sc.next();
 						m.updateAddress(userId, address);
 						break;
 					case 3:
 						log.getInput("Enter your new Password:");
-						String password1=sc.next();
+						String password1 = sc.next();
 						m.changePassword(userId, password1);
 						break;
 					default:
@@ -101,9 +94,8 @@ public class TestUser {
 					}
 					break;
 				case 7:
-					List<User>dueBooks=m.dueDateCheck(userId);
-					for(User dueBook:dueBooks)
-					{
+					List<User> dueBooks = m.dueDateCheck(userId);
+					for (User dueBook : dueBooks) {
 						log.getInput(dueBook);
 					}
 					break;
@@ -112,8 +104,8 @@ public class TestUser {
 					break;
 				}
 				log.getInput("Do you want to continue?(Y/N)");
-				s=sc.next().charAt(0);
-			}while(s=='Y'||s=='y');	
+				s = sc.next().charAt(0);
+			} while (s == 'Y' || s == 'y');
 		}
 		sc.close();
 	}

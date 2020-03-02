@@ -3,7 +3,8 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.impl.BookDetailsDAOImpl;
+import com.books.dao.BookDetailsDAO;
+import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.BookDetails;
 
@@ -12,7 +13,7 @@ public class TestBookDetails
 	private static final Logger log=Logger.getInstance();
 	public static void main(String args[])throws Exception
 	{
-		BookDetailsDAOImpl k=new BookDetailsDAOImpl();
+		BookDetailsDAO k=DAOFactory.getBookDetailsDAO();
 		BookDetails obj=new BookDetails();
 		Scanner sc=new Scanner(System.in);
 		char s;

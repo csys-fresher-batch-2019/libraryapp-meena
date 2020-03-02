@@ -1,7 +1,7 @@
 package com.books.model;
-public class BookDetails 
-{
-	
+
+public class BookDetails {
+
 	private int isbnNo;
 	private String bookName;
 	private String authorName;
@@ -11,6 +11,7 @@ public class BookDetails
 	private String languages;
 	private int totalBook;
 	private int active;
+
 	public int getTotalBook() {
 		return totalBook;
 	}
@@ -19,7 +20,6 @@ public class BookDetails
 		this.totalBook = totalBook;
 	}
 
-	
 	public int getIsbnNo() {
 		return isbnNo;
 	}
@@ -84,10 +84,8 @@ public class BookDetails
 		this.active = active;
 	}
 
-	
-	
 	public BookDetails() {
-		super();	
+		super();
 	}
 
 	@Override
@@ -110,9 +108,5 @@ public class BookDetails
 		this.totalBook = totalBook;
 		this.active = active;
 	}
-	
-	
-	
 
-	
 }
