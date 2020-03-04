@@ -23,23 +23,27 @@ public class BookDetailsDAOImplTest {
 	}
 
 	@Test
-	@Ignore
+
 	public void testInsertBookDetails() throws Exception {
-		int isbnNo = 1040;
+		int isbnNo = 1041;
 		String bookName = "Basic of marketing";
 		String authorName = "Sundar";
 		String publisher = "AVK publisher";
-		int version = 1;
+		int version = 2;
 		String category = "Business";
 		String language = "English";
 		int totalStocks = 0;
 		int active = 1;
 		BookDetails obj = new BookDetails(isbnNo, bookName, authorName, publisher, version, category, language,
 				totalStocks, active);
-		int row = k.insertBookDetails(obj);
+
+		int actual = k.insertBookDetails(obj);
+		int expected = 1;
+		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
+	@Ignore
 	public void testDeleteBookDetails() throws Exception {
 		int bookId = 40;
 		int actual = k.deleteBookDetails(bookId);
