@@ -14,7 +14,7 @@ public interface PenalityCalcDAO {
 
 	public List<PenalityCalc> displayFineDetails() throws Exception;
 
-	public void updateDueDate(int bookId2, int userId2) throws Exception;
+	public int updateDueDate(int bookId2, int userId2) throws Exception;
 
 	public int setBookLimit(int count) throws Exception;
 
@@ -42,9 +42,9 @@ public interface PenalityCalcDAO {
 
 	public List<CategorySettings> displayCategories() throws Exception;
 
-	public void updateDueDateAll() throws Exception;
+	public int updateDueDateAll() throws Exception;
 
-	public void updateFineAll() throws Exception;
+	public int updateFineAll() throws Exception;
 
-	public void updatePopup(int popup) throws Exception;
+	public int updatePopup(int popup) throws Exception;
 }

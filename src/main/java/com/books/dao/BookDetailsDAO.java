@@ -15,5 +15,5 @@ public interface BookDetailsDAO {
 
 	public int checkAdmin(String admin, String password) throws Exception;
 
-	public void updateTotalStock() throws Exception;
+	public int updateTotalStock() throws Exception;
 }

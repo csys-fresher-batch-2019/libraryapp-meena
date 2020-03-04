@@ -35,7 +35,7 @@ public class TestUserDetails {
 				log.getInput("Choose the gender:(M/F)");
 				String gender = t.next();
 				UserDetails userDetails = new UserDetails(userName, address, phno, email, password, gender);
-				m.insertUserDetails(userDetails);
+				int row=m.insertUserDetails(userDetails);
 				break;
 			case 2:
 				List<UserDetails> displayUserDetails = m.displayUserDetails();
@@ -46,7 +46,7 @@ public class TestUserDetails {
 			case 3:
 				log.getInput("Enter the user Id");
 				int userId = t.nextInt();
-				int row = m.deleteUserDetails(userId);
+				int row1 = m.deleteUserDetails(userId);
 				break;
 			default:
 				log.getInput("Invalid option");
