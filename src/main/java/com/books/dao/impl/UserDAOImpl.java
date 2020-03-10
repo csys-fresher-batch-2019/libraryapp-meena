@@ -280,7 +280,9 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 
 	}
-
+/**
+ * 
+ */
 	@Override
 	public int findAvailable(int userId) throws Exception {
 		int status = 0;
