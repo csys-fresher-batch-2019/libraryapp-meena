@@ -41,7 +41,6 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 							totalStock, active);
 					list.add(bd);
 				}
-
 			}
 
 		} catch (Exception e) {

@@ -3,6 +3,14 @@ package com.books.model;
 import java.sql.Date;
 
 public class User {
+	
+	private int bookId;
+	private int userId;
+	private Date issuedDate;
+	private Date dueDate;
+	private Date returnedDate;
+	private int fineAmount;
+	private String status;
 	public int getBookId() {
 		return bookId;
 	}
@@ -58,15 +66,6 @@ public class User {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	private int bookId;
-	private int userId;
-	private Date issuedDate;
-	private Date dueDate;
-	private Date returnedDate;
-	private int fineAmount;
-	private String status;
-
 	public User(int bookId, Date issuedDate, Date dueDate, Date returnedDate, int fineAmount, String status2) {
 		this.bookId = bookId;
 		this.issuedDate = issuedDate;
