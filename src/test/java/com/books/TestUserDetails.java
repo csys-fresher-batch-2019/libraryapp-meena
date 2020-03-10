@@ -3,16 +3,16 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.UserDetailsDAO;
-import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.UserDetails;
+import com.books.service.UserDetailsService;
 
 public class TestUserDetails {
 	private static final Logger log = Logger.getInstance();
 
 	public static void main(String[] args) throws Exception {
-		UserDetailsDAO m = DAOFactory.getUserDetailsDAO();
+		UserDetailsService ob = new UserDetailsService();
+		
 		Scanner t = new Scanner(System.in);
 		char k;
 
@@ -35,10 +35,11 @@ public class TestUserDetails {
 				log.getInput("Choose the gender:(M/F)");
 				String gender = t.next();
 				UserDetails userDetails = new UserDetails(userName, address, phno, email, password, gender);
-				int row=m.insertUserDetails(userDetails);
+				int row = ob.insertUserDetails(userDetails);
+				log.getInput(row);
 				break;
 			case 2:
-				List<UserDetails> displayUserDetails = m.displayUserDetails();
+				List<UserDetails> displayUserDetails = ob.displayUserDetails();
 				for (UserDetails userdetails : displayUserDetails) {
 					log.getInput(userdetails);
 				}
@@ -46,7 +47,8 @@ public class TestUserDetails {
 			case 3:
 				log.getInput("Enter the user Id");
 				int userId = t.nextInt();
-				int row1 = m.deleteUserDetails(userId);
+				int row1 = ob.deleteUserDetails(userId);
+				log.getInput(row1);
 				break;
 			default:
 				log.getInput("Invalid option");

@@ -3,17 +3,18 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.BookDetailsDAO;
-import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.BookDetails;
+import com.books.service.BookDetailsService;
+import com.books.validator.BookDetailsValidator;
 
 public class TestBookDetails
 {
 	private static final Logger log=Logger.getInstance();
 	public static void main(String args[])throws Exception
 	{
-		BookDetailsDAO k=DAOFactory.getBookDetailsDAO();
+		BookDetailsService ob=new BookDetailsService();
+		BookDetailsValidator v=new BookDetailsValidator();
 		BookDetails obj=new BookDetails();
 		Scanner sc=new Scanner(System.in);
 		char s;
@@ -22,7 +23,7 @@ public class TestBookDetails
 		String admin=sc.next();
 		log.getInput("Enter the password:");
 		String password=sc.next();
-		int status=k.checkAdmin(admin, password);
+		int status=ob.checkAdmin(admin, password);
 		if(status!=0)
 		{
 			do {
@@ -32,8 +33,8 @@ public class TestBookDetails
 				switch(c) 
 				{
 				case 1:
-					k.updateTotalStock();
-					List<BookDetails> displayBooks = k.displayBooks();
+					ob.updateStockRoom();
+					List<BookDetails> displayBooks = ob.displayBooks();
 					for (BookDetails bookDetails : displayBooks) {
 						log.getInput(bookDetails);
 					}
@@ -43,6 +44,7 @@ public class TestBookDetails
 					obj.setIsbnNo(sc.nextInt());
 					System.out.print("Enter BookName:");
 					obj.setBookName(sc.next());
+					v.checkBookName(obj.getBookName());
 					System.out.print("Enter Author Name:");
 					obj.setAuthorName(sc.next());
 					System.out.print("Enter publisher:");
@@ -54,15 +56,16 @@ public class TestBookDetails
 					System.out.print("Enter language:");
 					obj.setLanguages(sc.next());
 					log.getInput(obj);
-					int row=k.insertBookDetails(obj);
+					int row=ob.addNewBook(obj);
+					log.getInput(row);
 					break;
 				case 3:
 					System.out.print("Enter the ISBN number");
 					int id=sc.nextInt();
-						k.deleteBookDetails(id);
+						ob.deleteBookDetails(id);
 					break;
 				case 4:
-					int tot=k.totalBooks();
+					int tot=ob.totalBooks();
 					log.getInput(tot);
 					break;
 				default:

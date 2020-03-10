@@ -19,7 +19,7 @@ import com.books.logger.Logger;
 public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	private static final Logger log = Logger.getInstance();
 
-	public void calculateFineAmount(int bookId2, int userId2) throws Exception {
+	public void findFineAmount(int bookId2, int userId2) throws Exception {
 
 		String sql = "update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'and book_id=? and user_id=?";
 		log.getInput(sql);
@@ -27,12 +27,13 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			stmt.setInt(1, bookId2);
 			stmt.setInt(2, userId2);
 			int row = stmt.executeUpdate();
+			log.getInput(row);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public List<PenalityCalc> displayFineDetails() throws Exception {
+	public List<PenalityCalc> findAllFineDetails() throws Exception {
 		String sql = "select *from fine_calc";
 		List<PenalityCalc> list = new ArrayList<PenalityCalc>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -76,7 +77,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public int setBookLimit(int count) throws Exception {
+	public int saveBookLimit(int count) throws Exception {
 		String sql = "update allocated set allocated_count=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
@@ -90,7 +91,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public int setPenality(int amount) throws Exception {
+	public int savePenality(int amount) throws Exception {
 
 		int row = 0;
 		String sql = "update fine_table set fine_amount=?";
@@ -105,7 +106,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public int setDueDays(int days) throws Exception {
+	public int saveDueDays(int days) throws Exception {
 		String sql = "update duedate set days=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -119,7 +120,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public List<Additional> booksCount() throws Exception {
+	public List<Additional> findBybooksCount() throws Exception {
 		String sql = "select n.isbn_no,count(*) as cnt from fine_calc k,stock_room n where k.book_id=n.book_id group by n.isbn_no";
 		List<Additional> list = new ArrayList<Additional>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -139,7 +140,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 
 	}
 
-	public List<CalcCard> userCardCount() throws Exception {
+	public List<CalcCard> findAlluserCardCount() throws Exception {
 		String sql = "select user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users group by user_id";
 		List<CalcCard> list = new ArrayList<CalcCard>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -173,7 +174,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public int insertUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
+	public int saveUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
 		int row = 0;
 		String str1 = "select isbn_no  from stock_room sr,fine_calc fc where sr.book_id = fc.book_id and user_id=? and isbn_no = (select isbn_no  from stock_room where book_id =?)";
 		String sql = "insert into fine_calc(item_id,book_id,user_id,issued_date)values(item_id_seq.nextval,?,?,?)";
@@ -199,7 +200,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 
 	}
 
-	public int insertNewLanguage(String language) throws Exception {
+	public int saveNewLanguage(String language) throws Exception {
 		int row = 0;
 		String sql = "insert into languages(languages) values(?)";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -225,7 +226,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public List<LanguageSettings> displayLanguages() throws Exception {
+	public List<LanguageSettings> findAllLanguages() throws Exception {
 		List<LanguageSettings> list = new ArrayList<LanguageSettings>();
 		String sql = "select * from languages where active=1";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -245,7 +246,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return null;
 	}
 
-	public int insertNewCategory(String category) throws Exception {
+	public int saveNewCategory(String category) throws Exception {
 		String sql = "insert into category(categories)values(?)";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -271,7 +272,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 		return row;
 	}
 
-	public List<CategorySettings> displayCategories() throws Exception {
+	public List<CategorySettings> findAllCategories() throws Exception {
 		List<CategorySettings> list = new ArrayList<CategorySettings>();
 		String sql = "select * from category where active=1";
 		try (Connection con = ConnectionUtil.getConnection();

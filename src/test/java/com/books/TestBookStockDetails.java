@@ -3,16 +3,16 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.BookStockDetailsDAO;
-import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.BookStockDetails;
+import com.books.service.BookStockDetailsService;
 public class TestBookStockDetails {
 	private static final Logger log=Logger.getInstance();
 
 	public static void main(String[] args) throws Exception 
 	{
-		BookStockDetailsDAO m=DAOFactory.getBookStockDetailsDAO();
+		BookStockDetailsService ob=new BookStockDetailsService();
+		
 		BookStockDetails obj=new BookStockDetails();
 		Scanner k=new Scanner(System.in);
 		char s;
@@ -24,7 +24,7 @@ public class TestBookStockDetails {
 			switch(ch)
 			{
 			case 1:
-				List<BookStockDetails>displayBookStockDetails=m.displayBookStockDetails();
+				List<BookStockDetails>displayBookStockDetails=ob.displayBookStockDetails();
 				for (BookStockDetails bookStockDetails : displayBookStockDetails)
 				{
 					log.getInput(bookStockDetails);
@@ -33,25 +33,25 @@ public class TestBookStockDetails {
 			case 2:
 				log.getInput("Enter the ISBN number:");
 				obj.setIsbnNo(k.nextInt());
-				m.insertBookStockDetails(obj.getIsbnNo());
+				ob.addNewStock(obj.getIsbnNo());
 				break;
 			case 3:
-				m.updateStockRoom();
+				ob.updateStockRoom();
 				break;
 			case 4:
-				List<BookStockDetails>totalStocks=m.totalStocks();
+				List<BookStockDetails>totalStocks=ob.totalStocks();
 				for (BookStockDetails totalStock : totalStocks)
 				{
 					log.getInput("ISBN Number:"+totalStock.getIsbnNo() +""+"Total Stock:"+totalStock.getTotalBooks());
 				}
 				break;
 			case 5:
-				List<BookStockDetails>individualRemaining=m.individualRemaining();
+				List<BookStockDetails>individualRemaining=ob.individualRemaining();
 				for(BookStockDetails stock:individualRemaining)
 				{
 					log.getInput("ISBN Number:"+stock.getIsbnNo()+""+"Remaining:"+stock.getRemaining());
 				}
-				List<BookStockDetails>individualIssued=m.individualIssued();
+				List<BookStockDetails>individualIssued=ob.individualIssued();
 				for(BookStockDetails stocks:individualIssued)
 				{
 					log.getInput("ISBN Number:"+stocks.getIsbnNo()+""+"Issued:"+stocks.getIssued());
@@ -60,7 +60,7 @@ public class TestBookStockDetails {
 			case 6:
 				log.getInput("Enter the book Id:");
 				int bookId=k.nextInt();
-				m.deleteStock(bookId);
+				ob.deleteStock(bookId);
 			default:
 					log.getInput("Invalid");
 					break;

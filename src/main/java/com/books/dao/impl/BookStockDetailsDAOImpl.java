@@ -15,7 +15,10 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 
 	private static final Logger log = Logger.getInstance();
 
-	public int insertBookStockDetails(int isbnNo) throws Exception {
+	/**
+	 * Used to insert the new stock in the stock room.
+	 */
+	public int saveBookStockDetails(int isbnNo) throws Exception {
 		int row = 0;
 		String sql = "insert into stock_room(book_id,isbn_no)values(book_id_seq.nextval,?)";
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -29,7 +32,10 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return row;
 	}
 
-	public List<BookStockDetails> displayBookStockDetails() throws Exception {
+	/**
+	 * Used to display all the stocks with book id.
+	 */
+	public List<BookStockDetails> findAllBookStockDetails() throws Exception {
 		List<BookStockDetails> list = new ArrayList<BookStockDetails>();
 		String sql1 = "select *from stock_room order by book_id";
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -48,6 +54,9 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return list;
 	}
 
+	/**
+	 * Used to update the stock room for each book which is taken.
+	 */
 	public int updateStockRoom() throws Exception {
 		String sql = "update stock_room set active=0 where book_id in(select f.book_id from stock_room s,fine_calc f where f.book_id=s.book_id and f.status='Issued')";
 		int row = 0;
@@ -61,8 +70,11 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return row;
 	}
 
+	/**
+	 * Unused code
+	 */
 	@Override
-	public List<BookStockDetails> totalStocks() throws Exception {
+	public List<BookStockDetails> findTotalStocks() throws Exception {
 		List<BookStockDetails> list = new ArrayList<BookStockDetails>();
 		String sql = "select isbn_no,count(*)as total_books from stock_room group by isbn_no order by isbn_no asc";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
@@ -82,6 +94,9 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return list;
 	}
 
+	/**
+	 * Unused code
+	 */
 	@Override
 	public int updateActive(int bookId) throws Exception {
 		String sql = "update stock_room set active=0 where book_id=?";
@@ -97,8 +112,11 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return row;
 	}
 
+	/**
+	 * Used to find all the remaining stocks of each books
+	 */
 	@Override
-	public List<BookStockDetails> individualRemaining() throws Exception {
+	public List<BookStockDetails> findAllIndividualRemaining() throws Exception {
 		List<BookStockDetails> list = new ArrayList<BookStockDetails>();
 		String sql = "select isbn_no,count(*)as remaining from stock_room where active=1 group by isbn_no order by isbn_no asc";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -116,8 +134,11 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return list;
 	}
 
+	/**
+	 * Used to find all the issued stocks of each books
+	 */
 	@Override
-	public List<BookStockDetails> individualIssued() throws Exception {
+	public List<BookStockDetails> findAllIndividualIssued() throws Exception {
 		List<BookStockDetails> list = new ArrayList<BookStockDetails>();
 		String sql = "select isbn_no,count(*)as issued from stock_room where active=0 group by isbn_no order by isbn_no asc";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -135,6 +156,9 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 		return list;
 	}
 
+	/**
+	 * Used to remove the stock of the book.
+	 */
 	@Override
 	public int deleteStock(int bookId) throws Exception {
 		String sql = "delete from stock_room where book_id=?";

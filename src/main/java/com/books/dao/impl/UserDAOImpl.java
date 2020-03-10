@@ -17,7 +17,10 @@ import com.books.dao.UserDAO;
 public class UserDAOImpl implements UserDAO {
 	private static final Logger log = Logger.getInstance();
 
-	public List<User> viewHistory(int userId) throws Exception {
+	/**
+	 * Used to display the history of books to the user.
+	 */
+	public List<User> findAllHistory(int userId) throws Exception {
 		String sql = "select book_id,issued_date,due_date,returned_date,fine_amount,status from  fine_calc where user_id=? order by issued_date desc";
 		List<User> list = new ArrayList<User>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -46,7 +49,10 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 	}
 
-	public int checkLogin(String email, String password) throws Exception {
+	/**
+	 * Used to validate the login details of the user.
+	 */
+	public int findByUser(String email, String password) throws Exception {
 		int uid = 0;
 		String sql = "select * from users where email=?and password=?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -67,8 +73,11 @@ public class UserDAOImpl implements UserDAO {
 		return uid;
 	}
 
+	/**
+	 * Used to display all the current books to the user.
+	 */
 	@Override
-	public List<User> currentBooks(int userId) throws Exception {
+	public List<User> findAllCurrentBooks(int userId) throws Exception {
 		String sql = "select book_id,issued_date,due_date,returned_date,fine_amount,status from  fine_calc where user_id=? and status='Issued' order by issued_date desc";
 		List<User> list = new ArrayList<User>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -99,8 +108,11 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 	}
 
+	/**
+	 * Used to search a book by book name.
+	 */
 	@Override
-	public List<BookDetails> searchBookName(String bookName) throws Exception {
+	public List<BookDetails> findByBookName(String bookName) throws Exception {
 		List<BookDetails> list = new ArrayList<BookDetails>();
 		String sql = "select *from book where lower(book_name) like ?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -129,8 +141,11 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
+	/**
+	 * Used to search the book by author name.
+	 */
 	@Override
-	public List<BookDetails> searchAuthorName(String author) throws Exception {
+	public List<BookDetails> findByAuthorName(String author) throws Exception {
 		List<BookDetails> list = new ArrayList<BookDetails>();
 		String sql = "select *from book where lower(author_name) like ?";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -158,7 +173,10 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 	}
 
-	public List<CalcCard> remainingCard(int userId) throws Exception {
+	/**
+	 * Used to calculate and display the remaining card for the user.
+	 */
+	public List<CalcCard> findRemainingCard(int userId) throws Exception {
 		CalcCard c = new CalcCard();
 		List<CalcCard> list = new ArrayList<CalcCard>();
 		String sql = "select distinct user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users where user_id=?";
@@ -177,6 +195,9 @@ public class UserDAOImpl implements UserDAO {
 		return list;
 	}
 
+	/**
+	 * Used to change the phone number for the user.
+	 */
 	@Override
 	public int updatePhoneNumber(int userId, long phoneNumber) throws Exception {
 		String sql = "update users set ph_no=? where user_id=?";
@@ -191,6 +212,9 @@ public class UserDAOImpl implements UserDAO {
 		return row;
 	}
 
+	/**
+	 * Used to change the address for the user.
+	 */
 	@Override
 	public int updateAddress(int userId, String address) throws Exception {
 		String sql = "update users set address=? where user_id=?";
@@ -205,8 +229,11 @@ public class UserDAOImpl implements UserDAO {
 		return row;
 	}
 
+	/**
+	 * Used to change the password for the user.
+	 */
 	@Override
-	public int changePassword(int userId, String password) throws Exception {
+	public int updatePassword(int userId, String password) throws Exception {
 		String sql = "update users set password=? where user_id=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -219,8 +246,11 @@ public class UserDAOImpl implements UserDAO {
 		return row;
 	}
 
+	/**
+	 * Used to display the due books for the user.
+	 */
 	@Override
-	public List<User> dueDateCheck(int userId) throws Exception {
+	public List<User> findDueDate(int userId) throws Exception {
 		String sql = "select *from fine_calc where due_date-sysdate=(select popup from popup)and user_id=?";
 		List<User> list = new ArrayList<User>();
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -252,7 +282,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public int checkAvailable(int userId) throws Exception {
+	public int findAvailable(int userId) throws Exception {
 		int status = 0;
 		String sql = "select *from fine_calc where user_id=?";
 		String sql1 = "select * from allocated";
@@ -262,7 +292,7 @@ public class UserDAOImpl implements UserDAO {
 			try (ResultSet rs = pst.executeQuery();) {
 				if (rs.next()) {
 					status = 1;
-					s.remainingCard(userId);
+					s.findRemainingCard(userId);
 				} else {
 					try (PreparedStatement pst1 = con.prepareStatement(sql1); ResultSet rs1 = pst1.executeQuery();) {
 						if (rs1.next()) {

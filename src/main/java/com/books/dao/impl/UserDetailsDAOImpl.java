@@ -14,7 +14,7 @@ import com.books.logger.Logger;
 public class UserDetailsDAOImpl implements UserDetailsDAO {
 	private static final Logger log = Logger.getInstance();
 
-	public int insertUserDetails(UserDetails userDetails) throws Exception {
+	public int saveUserDetails(UserDetails userDetails) throws Exception {
 		int row = 0;
 		String sql = ("insert into users(user_id,user_name,address,ph_no,email,password,gender)values(user_id_seq.nextval,?,?,?,?,?,?)");
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -36,7 +36,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 		return row;
 	}
 
-	public List<UserDetails> displayUserDetails() throws Exception {
+	public List<UserDetails> findAllUserDetails() throws Exception {
 		String sqlQuery = "select * from users where active=1";
 		List<UserDetails> list = new ArrayList<UserDetails>();
 		try (Connection connection = ConnectionUtil.getConnection();

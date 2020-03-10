@@ -3,26 +3,25 @@ package com.books;
 import java.util.List;
 import java.util.Scanner;
 
-import com.books.dao.UserDAO;
-import com.books.daofactory.DAOFactory;
 import com.books.logger.Logger;
 import com.books.model.BookDetails;
 import com.books.model.CalcCard;
 import com.books.model.User;
+import com.books.service.UserService;
 
 public class TestUser {
 	private static final Logger log = Logger.getInstance();
 
 	public static void main(String[] args) throws Exception {
-		UserDAO m = DAOFactory.getUserDAO();
-
+		UserService ob = new UserService();
+		
 		Scanner sc = new Scanner(System.in);
 		char s;
 		log.getInput("Enter the email");
 		String email = sc.next();
 		log.getInput("Enter the password");
 		String password = sc.next();
-		int userId = m.checkLogin(email, password);
+		int userId = ob.checkLogin(email, password);
 		System.out.println(userId);
 		if (userId != 0) {
 			do {
@@ -32,13 +31,13 @@ public class TestUser {
 				int ch = sc.nextInt();
 				switch (ch) {
 				case 1:
-					List<User> user = m.viewHistory(userId);
+					List<User> user = ob.viewHistory(userId);
 					for (User users : user) {
 						log.getInput(users);
 					}
 					break;
 				case 2:
-					List<User> users = m.currentBooks(userId);
+					List<User> users = ob.currentBooks(userId);
 					for (User user1 : users) {
 						log.getInput(user1);
 					}
@@ -46,7 +45,7 @@ public class TestUser {
 				case 3:
 					log.getInput("Enter the book Name");
 					String bookName = sc.next();
-					List<BookDetails> bookDetails = m.searchBookName(bookName);
+					List<BookDetails> bookDetails = ob.searchBookName(bookName);
 					for (BookDetails book : bookDetails) {
 						log.getInput(book);
 					}
@@ -54,15 +53,15 @@ public class TestUser {
 				case 4:
 					log.getInput("Enter the author Name");
 					String authorName = sc.next();
-					List<BookDetails> book = m.searchBookName(authorName);
+					List<BookDetails> book = ob.searchAuthorName(authorName);
 					for (BookDetails books : book) {
 						log.getInput(books);
 					}
 					break;
 				case 5:
-					int status = m.checkAvailable(userId);
+					int status = ob.checkAvailable(userId);
 					if (status != 0) {
-						List<CalcCard> card = m.remainingCard(userId);
+						List<CalcCard> card = ob.remainingCard(userId);
 						for (CalcCard cards : card) {
 							log.getInput(
 									"Taken Cards:" + cards.getTakenBooks() + "" + "Remaining:" + cards.getRemaining());
@@ -76,17 +75,17 @@ public class TestUser {
 					case 1:
 						log.getInput("Enter your new phone number:");
 						long phoneNumber = sc.nextLong();
-						m.updatePhoneNumber(userId, phoneNumber);
+						ob.updatePhoneNumber(userId, phoneNumber);
 						break;
 					case 2:
 						log.getInput("Enter the address:");
 						String address = sc.next();
-						m.updateAddress(userId, address);
+						ob.updateAddress(userId, address);
 						break;
 					case 3:
 						log.getInput("Enter your new Password:");
 						String password1 = sc.next();
-						m.changePassword(userId, password1);
+						ob.changePassword(userId, password1);
 						break;
 					default:
 						log.getInput("Invalid choice");
@@ -94,7 +93,7 @@ public class TestUser {
 					}
 					break;
 				case 7:
-					List<User> dueBooks = m.dueDateCheck(userId);
+					List<User> dueBooks = ob.dueDateCheck(userId);
 					for (User dueBook : dueBooks) {
 						log.getInput(dueBook);
 					}
