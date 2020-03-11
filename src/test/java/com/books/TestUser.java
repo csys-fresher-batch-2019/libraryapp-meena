@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import com.books.logger.Logger;
 import com.books.model.BookDetails;
-import com.books.model.CalcCard;
+import com.books.dto.CalcCard;
 import com.books.model.User;
 import com.books.service.UserService;
 

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.books.logger.Logger;
-import com.books.model.Additional;
-import com.books.model.CalcCard;
-import com.books.model.CategorySettings;
-import com.books.model.LanguageSettings;
+import com.books.dto.Additional;
+import com.books.dto.CalcCard;
+import com.books.dto.CategorySettings;
+import com.books.dto.LanguageSettings;
 import com.books.model.PenalityCalc;
 import com.books.service.BookStockDetailsService;
 import com.books.service.PenaltyCalcService;

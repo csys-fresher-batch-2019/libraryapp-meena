@@ -5,7 +5,7 @@ import java.util.List;
 import com.books.dao.UserDAO;
 import com.books.daofactory.DAOFactory;
 import com.books.model.BookDetails;
-import com.books.model.CalcCard;
+import com.books.dto.CalcCard;
 import com.books.model.User;
 
 public class UserService {

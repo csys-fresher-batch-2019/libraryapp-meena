@@ -3,10 +3,10 @@ package com.books.dao;
 import java.sql.Date;
 import java.util.List;
 
-import com.books.model.Additional;
-import com.books.model.CalcCard;
-import com.books.model.CategorySettings;
-import com.books.model.LanguageSettings;
+import com.books.dto.Additional;
+import com.books.dto.CalcCard;
+import com.books.dto.CategorySettings;
+import com.books.dto.LanguageSettings;
 import com.books.model.PenalityCalc;
 
 public interface PenalityCalcDAO {

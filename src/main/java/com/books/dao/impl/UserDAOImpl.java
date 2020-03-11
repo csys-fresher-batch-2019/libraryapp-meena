@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.books.util.ConnectionUtil;
 import com.books.model.BookDetails;
-import com.books.model.CalcCard;
+import com.books.dto.CalcCard;
 import com.books.model.User;
 import com.books.dao.UserDAO;
 

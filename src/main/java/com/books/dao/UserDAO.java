@@ -3,7 +3,7 @@ package com.books.dao;
 import java.util.List;
 
 import com.books.model.BookDetails;
-import com.books.model.CalcCard;
+import com.books.dto.CalcCard;
 import com.books.model.User;
 
 public interface UserDAO {

@@ -1,4 +1,4 @@
-package com.books.model;
+package com.books.dto;
 
 public class CategorySettings {
 	public String getCategory() {
