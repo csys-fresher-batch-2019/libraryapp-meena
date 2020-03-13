@@ -5,12 +5,14 @@ import com.books.logger.Logger;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.books.util.ConnectionUtil;
 import com.books.model.BookDetails;
 import com.books.dto.CalcCard;
+import com.books.exception.DbException;
 import com.books.model.User;
 import com.books.dao.UserDAO;
 
@@ -19,12 +21,14 @@ public class UserDAOImpl implements UserDAO {
 
 	/**
 	 * Used to display the history of books to the user.
+	 * 
+	 * @throws SQLException
 	 */
-	public List<User> findAllHistory(int userId) throws Exception {
+	public List<User> findAllHistory(int userId) throws DbException {
 		String sql = "select book_id,issued_date,due_date,returned_date,fine_amount,status from  fine_calc where user_id=? order by issued_date desc";
 		List<User> list = new ArrayList<User>();
 		try (Connection connection = ConnectionUtil.getConnection();
-				PreparedStatement pst = connection.prepareStatement(sql);) {
+				PreparedStatement pst = connection.prepareStatement(sql)) {
 			pst.setInt(1, userId);
 			ResultSet rs = pst.executeQuery();
 			int flag = 0;
@@ -38,24 +42,28 @@ public class UserDAOImpl implements UserDAO {
 				String status = rs.getString("status");
 				User u = new User(bookId, issuedDate, dueDate, returnedDate, fineAmount, status);
 				list.add(u);
+
 			}
 
 			if (flag == 0) {
 				log.getInput("No history");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
+
 		return list;
+
 	}
 
 	/**
 	 * Used to validate the login details of the user.
+	 * @throws SQLException 
 	 */
-	public int findByUser(String email, String password) throws Exception {
+	public int findByUser(String email, String password) throws DbException, SQLException {
 		int uid = 0;
 		String sql = "select * from users where email=?and password=?";
-		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 			pst.setString(1, email);
 			pst.setString(2, password);
 			try (ResultSet rs = pst.executeQuery();) {
@@ -66,9 +74,13 @@ public class UserDAOImpl implements UserDAO {
 				} else {
 					log.getInput("Invalid Login");
 				}
+			} catch (SQLException e) {
+				throw new DbException("Invalid select");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+
+		catch (DbException e) {
+			throw new DbException("Connection error");
 		}
 		return uid;
 	}
@@ -77,7 +89,7 @@ public class UserDAOImpl implements UserDAO {
 	 * Used to display all the current books to the user.
 	 */
 	@Override
-	public List<User> findAllCurrentBooks(int userId) throws Exception {
+	public List<User> findAllCurrentBooks(int userId) throws DbException {
 		String sql = "select book_id,issued_date,due_date,returned_date,fine_amount,status from  fine_calc where user_id=? and status='Issued' order by issued_date desc";
 		List<User> list = new ArrayList<User>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -102,17 +114,19 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return list;
 	}
 
 	/**
 	 * Used to search a book by book name.
+	 * 
+	 * @throws SQLException
 	 */
 	@Override
-	public List<BookDetails> findByBookName(String bookName) throws Exception {
+	public List<BookDetails> findByBookName(String bookName) throws DbException, SQLException {
 		List<BookDetails> list = new ArrayList<BookDetails>();
 		String sql = "select *from book where lower(book_name) like ?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -132,20 +146,22 @@ public class UserDAOImpl implements UserDAO {
 							totalBooks, active);
 					list.add(bd);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.getInput("No Book Found");
+			} catch (SQLException e) {
+				throw new DbException("No book Found");
 			}
-
-			return list;
+		} catch (DbException e) {
+			throw new DbException("Connection error");
 		}
+
+		return list;
+
 	}
 
 	/**
 	 * Used to search the book by author name.
 	 */
 	@Override
-	public List<BookDetails> findByAuthorName(String author) throws Exception {
+	public List<BookDetails> findByAuthorName(String author) throws DbException {
 		List<BookDetails> list = new ArrayList<BookDetails>();
 		String sql = "select *from book where lower(author_name) like ?";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -166,9 +182,8 @@ public class UserDAOImpl implements UserDAO {
 						active);
 				list.add(bd);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.getInput("No Book Found");
+		} catch (SQLException e) {
+			throw new DbException("No book found");
 		}
 		return list;
 	}
@@ -176,7 +191,7 @@ public class UserDAOImpl implements UserDAO {
 	/**
 	 * Used to calculate and display the remaining card for the user.
 	 */
-	public List<CalcCard> findRemainingCard(int userId) throws Exception {
+	public List<CalcCard> findRemainingCard(int userId) throws DbException {
 		CalcCard c = new CalcCard();
 		List<CalcCard> list = new ArrayList<CalcCard>();
 		String sql = "select distinct user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users where user_id=?";
@@ -189,8 +204,8 @@ public class UserDAOImpl implements UserDAO {
 				}
 				list.add(c);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return list;
 	}
@@ -199,15 +214,15 @@ public class UserDAOImpl implements UserDAO {
 	 * Used to change the phone number for the user.
 	 */
 	@Override
-	public int updatePhoneNumber(int userId, long phoneNumber) throws Exception {
+	public int updatePhoneNumber(int userId, long phoneNumber) throws DbException {
 		String sql = "update users set ph_no=? where user_id=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setLong(1, phoneNumber);
 			pst.setInt(2, userId);
 			row = pst.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -216,15 +231,15 @@ public class UserDAOImpl implements UserDAO {
 	 * Used to change the address for the user.
 	 */
 	@Override
-	public int updateAddress(int userId, String address) throws Exception {
+	public int updateAddress(int userId, String address) throws DbException {
 		String sql = "update users set address=? where user_id=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, address);
 			pst.setInt(2, userId);
 			row = pst.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -233,15 +248,15 @@ public class UserDAOImpl implements UserDAO {
 	 * Used to change the password for the user.
 	 */
 	@Override
-	public int updatePassword(int userId, String password) throws Exception {
+	public int updatePassword(int userId, String password) throws DbException {
 		String sql = "update users set password=? where user_id=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, password);
 			pst.setInt(2, userId);
 			row = pst.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -250,7 +265,7 @@ public class UserDAOImpl implements UserDAO {
 	 * Used to display the due books for the user.
 	 */
 	@Override
-	public List<User> findDueDate(int userId) throws Exception {
+	public List<User> findDueDate(int userId) throws DbException {
 		String sql = "select *from fine_calc where due_date-sysdate=(select popup from popup)and user_id=?";
 		List<User> list = new ArrayList<User>();
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -274,17 +289,19 @@ public class UserDAOImpl implements UserDAO {
 				log.getInput("No Due Books in your account");
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return list;
 
 	}
-/**
- * 
- */
+
+	/**
+	 * @throws SQLException 
+	 * 
+	 */
 	@Override
-	public int findAvailable(int userId) throws Exception {
+	public int findAvailable(int userId) throws DbException, SQLException {
 		int status = 0;
 		String sql = "select *from fine_calc where user_id=?";
 		String sql1 = "select * from allocated";
@@ -304,8 +321,8 @@ public class UserDAOImpl implements UserDAO {
 						}
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				throw new DbException("Invalid select");
 			}
 		}
 		return status;

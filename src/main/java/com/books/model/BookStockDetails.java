@@ -43,11 +43,6 @@ public class BookStockDetails {
 		this.setIsbnNo(isbnNo2);
 		this.setRemaining(totalBooks);
 	}
-
-	public BookStockDetails() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public int getBookId() {
 		return bookId;
 	}
@@ -75,5 +70,7 @@ public class BookStockDetails {
 	@Override
 	public String toString() {
 		return "BookStockDetails [bookId=" + bookId + ", isbnNo=" + isbnNo + ", active=" + active + "]";
+	}
+	public BookStockDetails() {
 	}
 }

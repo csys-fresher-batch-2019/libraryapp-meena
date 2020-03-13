@@ -1,6 +1,16 @@
 package com.books.model;
 
 public class UserDetails {
+	
+	private int userId;
+	private String userName;
+	private String address;
+	private long phno;
+	private String email;
+	private String gender;
+	private int active = 1;
+	private String password;
+
 	public String getEmail() {
 		return email;
 	}
@@ -33,15 +43,7 @@ public class UserDetails {
 		this.password = password;
 	}
 
-	private int userId;
-	private String userName;
-	private String address;
-	private long phno;
-	private String email;
-	private String gender;
-	private int active = 1;
-	private String password;
-
+	
 	public UserDetails(String userName, String address, long phno, String email, String password, String gender) {
 
 		this.userName = userName;

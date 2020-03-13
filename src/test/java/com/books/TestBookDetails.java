@@ -42,25 +42,30 @@ public class TestBookDetails
 				case 2:
 					log.getInput("Enter the ISBN number");
 					obj.setIsbnNo(sc.nextInt());
-					System.out.print("Enter BookName:");
+					boolean validNumber=v.checkIsbnNo(obj.getIsbnNo());
+					log.getInput("Enter BookName:");
 					obj.setBookName(sc.next());
-					v.checkBookName(obj.getBookName());
-					System.out.print("Enter Author Name:");
+					boolean validName=v.checkName(obj.getBookName());
+					log.getInput("Enter Author Name:");
 					obj.setAuthorName(sc.next());
-					System.out.print("Enter publisher:");
+					boolean validAuthorName=v.checkName(obj.getAuthorName());
+					log.getInput("Enter publisher:");
 					obj.setPublisher(sc.next());
-					System.out.print("Enter version:");
+					log.getInput("Enter version:");
 					obj.setVersion(sc.nextInt());
-					System.out.print("Enter category:");
+					log.getInput("Enter category:");
 					obj.setCategories(sc.next());
-					System.out.print("Enter language:");
+					log.getInput("Enter language:");
 					obj.setLanguages(sc.next());
 					log.getInput(obj);
-					int row=ob.addNewBook(obj);
-					log.getInput(row);
+					if(validName==true && validNumber==true && validAuthorName==true) {
+						int row=ob.addNewBook(obj);	
+						log.getInput(row);
+					}
+					
 					break;
 				case 3:
-					System.out.print("Enter the ISBN number");
+					log.getInput("Enter the ISBN number");
 					int id=sc.nextInt();
 						ob.deleteBookDetails(id);
 					break;

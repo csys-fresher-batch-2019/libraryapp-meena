@@ -1,12 +1,12 @@
 package com.books.dto;
 
-public class Additional {
+public class BookCount {
 	private int bookId;
 	private String bookName;
 	private int count;
 	private int isbnNo;
 
-	public Additional(int isbnNo, int count) {
+	public BookCount(int isbnNo, int count) {
 		super();
 		this.isbnNo = isbnNo;
 		this.count = count;

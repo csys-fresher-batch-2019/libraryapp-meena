@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.books.dao.PenalityCalcDAO;
 import com.books.daofactory.DAOFactory;
-import com.books.dto.Additional;
+import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
@@ -38,7 +38,7 @@ public class PenaltyCalcService {
 		return penaltyCalcDAO.saveDueDays(days);
 	}
 
-	public List<Additional> booksCount() throws Exception {
+	public List<BookCount> booksCount() throws Exception {
 		return penaltyCalcDAO.findBybooksCount();
 	}
 

@@ -6,13 +6,16 @@ import java.util.Scanner;
 import com.books.logger.Logger;
 import com.books.model.UserDetails;
 import com.books.service.UserDetailsService;
+import com.books.validator.BookDetailsValidator;
+import com.books.validator.UserDetailsValidator;
 
 public class TestUserDetails {
 	private static final Logger log = Logger.getInstance();
 
 	public static void main(String[] args) throws Exception {
 		UserDetailsService ob = new UserDetailsService();
-		
+		BookDetailsValidator val=new BookDetailsValidator();
+		UserDetailsValidator userVal=new UserDetailsValidator();
 		Scanner t = new Scanner(System.in);
 		char k;
 
@@ -24,19 +27,25 @@ public class TestUserDetails {
 			case 1:
 				log.getInput("Enter the user name:");
 				String userName = t.next();
+				boolean validateName=val.checkName(userName);
 				log.getInput("Enter the address:");
 				String address = t.next();
 				log.getInput("Enter the phone number:");
 				long phno = t.nextLong();
+				boolean validatePhoneNumber=userVal.checkPhoneNumber(phno);
 				log.getInput("Enter the email id");
 				String email = t.next();
+				boolean validateEmail=userVal.checkEmail(email);
 				log.getInput("Enter the password");
 				String password = t.next();
 				log.getInput("Choose the gender:(M/F)");
 				String gender = t.next();
 				UserDetails userDetails = new UserDetails(userName, address, phno, email, password, gender);
-				int row = ob.insertUserDetails(userDetails);
-				log.getInput(row);
+				if(validateName==true&&validateEmail==true&&validatePhoneNumber==true)
+				{
+					int row = ob.insertUserDetails(userDetails);
+					log.getInput(row);
+				}
 				break;
 			case 2:
 				List<UserDetails> displayUserDetails = ob.displayUserDetails();

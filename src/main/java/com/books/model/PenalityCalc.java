@@ -12,25 +12,21 @@ public class PenalityCalc {
 	private int fineAmount;
 	private String status;
 
-	public int getItemId() {
-		return itemId;
-	}
-
-	public PenalityCalc(int itemId, int bookId, int userId, Date issuedDate, Date dueDate, Date returnedDate,
+	public PenalityCalc(int itemId, int bookId, int userId, Date issuedDate2, Date dueDate2, Date returnedDate2,
 			int fineAmount, String status) {
 		super();
 		this.itemId = itemId;
 		this.bookId = bookId;
 		this.userId = userId;
-		this.issuedDate = issuedDate;
-		this.dueDate = dueDate;
-		this.returnedDate = returnedDate;
+		this.issuedDate = issuedDate2;
+		this.dueDate = dueDate2;
+		this.returnedDate = returnedDate2;
 		this.fineAmount = fineAmount;
 		this.status = status;
 	}
 
-	public PenalityCalc() {
-		// TODO Auto-generated constructor stub
+	public int getItemId() {
+		return itemId;
 	}
 
 	public void setItemId(int itemId) {

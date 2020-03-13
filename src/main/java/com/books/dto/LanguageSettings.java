@@ -1,6 +1,10 @@
 package com.books.dto;
 
 public class LanguageSettings {
+
+	private String language;
+	private int active = 1;
+
 	public String getLanguage() {
 		return language;
 	}
@@ -16,9 +20,6 @@ public class LanguageSettings {
 	public void setActive(int active) {
 		this.active = active;
 	}
-
-	private String language;
-	private int active = 1;
 
 	@Override
 	public String toString() {

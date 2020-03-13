@@ -3,48 +3,49 @@ package com.books.dao;
 import java.sql.Date;
 import java.util.List;
 
-import com.books.dto.Additional;
+import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
+import com.books.exception.DbException;
 import com.books.model.PenalityCalc;
 
 public interface PenalityCalcDAO {
-	public void findFineAmount(int bookId2, int userId2) throws Exception;
+	public void findFineAmount(int bookId2, int userId2) throws DbException;
 
-	public List<PenalityCalc> findAllFineDetails() throws Exception;
+	public List<PenalityCalc> findAllFineDetails() throws DbException;
 
-	public int updateDueDate(int bookId2, int userId2) throws Exception;
+	public int updateDueDate(int bookId2, int userId2) throws DbException;
 
-	public int saveBookLimit(int count) throws Exception;
+	public int saveBookLimit(int count) throws DbException;
 
-	public int savePenality(int amount) throws Exception;
+	public int savePenality(int amount) throws DbException;
 
-	public int saveDueDays(int days) throws Exception;
+	public int saveDueDays(int days) throws DbException;
 
-	public List<Additional> findBybooksCount() throws Exception;
+	public List<BookCount> findBybooksCount() throws DbException;
 
-	public int updateReturnStatus(int bookId, int userId, Date returnedDate) throws Exception;
+	public int updateReturnStatus(int bookId, int userId, Date returnedDate) throws DbException;
 
-	public List<CalcCard> findAlluserCardCount() throws Exception;
+	public List<CalcCard> findAlluserCardCount() throws DbException;
 
-	public int saveUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception;
+	public int saveUserBookDetails(int bookId, int userId, Date issuedDate) throws DbException;
 
-	public int saveNewLanguage(String language) throws Exception;
+	public int saveNewLanguage(String language) throws DbException;
 
-	public int deleteLanguage(String language1) throws Exception;
+	public int deleteLanguage(String language1) throws DbException;
 
-	public List<LanguageSettings> findAllLanguages() throws Exception;
+	public List<LanguageSettings> findAllLanguages() throws DbException;
 
-	public int saveNewCategory(String category) throws Exception;
+	public int saveNewCategory(String category) throws DbException;
 
-	public int deteleCategory(String category1) throws Exception;
+	public int deteleCategory(String category1) throws DbException;
 
-	public List<CategorySettings> findAllCategories() throws Exception;
+	public List<CategorySettings> findAllCategories() throws DbException;
 
-	public int updateDueDateAll() throws Exception;
+	public int updateDueDateAll() throws DbException;
 
-	public int updateFineAll() throws Exception;
+	public int updateFineAll() throws DbException;
 
-	public int updatePopup(int popup) throws Exception;
+	public int updatePopup(int popup) throws DbException;
 }

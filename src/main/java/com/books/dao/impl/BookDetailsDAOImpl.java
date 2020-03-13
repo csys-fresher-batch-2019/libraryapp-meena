@@ -3,6 +3,7 @@ package com.books.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.books.util.ConnectionUtil;
 import com.books.model.BookDetails;
 
 import com.books.dao.BookDetailsDAO;
+import com.books.exception.DbException;
 import com.books.logger.Logger;
 
 public class BookDetailsDAOImpl implements BookDetailsDAO {
@@ -18,7 +20,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	/**
 	 * Used for display all the books.
 	 */
-	public List<BookDetails> findAllBooks() throws Exception {
+	public List<BookDetails> findAllBooks() throws DbException {
 
 		String sqlQuery = "select * from book where active=1 order by isbn_no";
 		List<BookDetails> list = new ArrayList<BookDetails>();
@@ -41,10 +43,11 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 							totalStock, active);
 					list.add(bd);
 				}
+			} catch (SQLException e) {
+				throw new DbException("Invalid select");
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Connection Error with Database");
 		}
 
 		return list;
@@ -53,7 +56,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	/**
 	 * Used to insert a new book into the database.
 	 */
-	public int saveBookDetails(BookDetails bookDetail) throws Exception {
+	public int saveBookDetails(BookDetails bookDetail) throws DbException {
 		int row = 0;
 		String sql = ("insert into book(isbn_no,book_name,author_name,publisher,version_no,categories,languages)values(?,?,?,?,?,?,?)");
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -68,17 +71,16 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 			row = pst.executeUpdate();
 			log.getInput(row + " row inserted");
 			log.getInput(sql);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to insert");
 		}
-
 		return row;
 	}
 
 	/**
 	 * Used to remove the book from the list
 	 */
-	public int deleteBookDetails(int isbnNo) throws Exception {
+	public int deleteBookDetails(int isbnNo) throws DbException {
 		int row = 0;
 		String sql = ("update book set active=0 where isbn_no=?");
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -89,8 +91,8 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 				row = pst.executeUpdate();
 				log.getInput(row + " row deleted");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -98,7 +100,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	/**
 	 * Used to find the total books in the library.
 	 */
-	public int findTotalBooks() throws Exception {
+	public int findTotalBooks() throws DbException {
 		int count = 0;
 		String sql = "select count(isbn_no)as total_books from book where active=1";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -107,8 +109,8 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 			if (rs.next()) {
 				count = rs.getInt("total_books");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid Select");
 		}
 		return count;
 	}
@@ -117,7 +119,7 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	 * Used to check the admin login.
 	 */
 	@Override
-	public int findByAdmin(String admin, String password) throws Exception {
+	public int findByAdmin(String admin, String password) throws DbException {
 		int status = 0;
 		String sql = "select * from admin where admin_name=?and admin_pwd=?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -132,8 +134,8 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 					log.getInput("Invalid Login");
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return status;
 	}
@@ -142,16 +144,16 @@ public class BookDetailsDAOImpl implements BookDetailsDAO {
 	 * Used to update the book table to get the total stock of the particular book.
 	 */
 	@Override
-	public int updateTotalStock() throws Exception {
+	public int updateTotalStock() throws DbException {
 		String sql = "update book set total_stocks=ISBN_COUNT(isbn_no)";
-		System.out.println(sql);
+		log.getInput(sql);
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 			row = pst.executeUpdate();
-			System.out.println(row + "updated");
+			log.getInput(row + "updated");
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 
 		return row;

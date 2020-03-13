@@ -4,14 +4,16 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.books.util.ConnectionUtil;
-import com.books.dto.Additional;
+import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
+import com.books.exception.DbException;
 import com.books.model.PenalityCalc;
 import com.books.dao.PenalityCalcDAO;
 import com.books.logger.Logger;
@@ -22,7 +24,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to calculate the fine amount for user.
 	 */
-	public void findFineAmount(int bookId2, int userId2) throws Exception {
+	public void findFineAmount(int bookId2, int userId2) throws DbException {
 
 		String sql = "update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'and book_id=? and user_id=?";
 		log.getInput(sql);
@@ -31,15 +33,15 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			stmt.setInt(2, userId2);
 			int row = stmt.executeUpdate();
 			log.getInput(row);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 	}
 
 	/**
 	 * Used to display all the book issued records.
 	 */
-	public List<PenalityCalc> findAllFineDetails() throws Exception {
+	public List<PenalityCalc> findAllFineDetails() throws DbException {
 		String sql = "select *from fine_calc";
 		List<PenalityCalc> list = new ArrayList<PenalityCalc>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -60,8 +62,10 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 					list.add(bd);
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
+		} catch (DbException e) {
+			throw new DbException("Connection error");
 		}
 		return list;
 	}
@@ -69,7 +73,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to update the due date for each user.
 	 */
-	public int updateDueDate(int bookId2, int userId2) throws Exception {
+	public int updateDueDate(int bookId2, int userId2) throws DbException {
 		int row = 0;
 		String sql = "update fine_calc set due_date=(issued_date+(select days from duedate))where book_id=? and user_id=?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -79,9 +83,9 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			stmt.setInt(2, userId2);
 			row = stmt.executeUpdate();
 			con.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -89,7 +93,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to set a book limit.
 	 */
-	public int saveBookLimit(int count) throws Exception {
+	public int saveBookLimit(int count) throws DbException {
 		String sql = "update allocated set allocated_count=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
@@ -97,8 +101,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			pst.setInt(1, count);
 			row = pst.executeUpdate();
 			log.getInput(row + " row updated");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -106,7 +110,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to set a penalty.
 	 */
-	public int savePenality(int amount) throws Exception {
+	public int savePenality(int amount) throws DbException {
 
 		int row = 0;
 		String sql = "update fine_table set fine_amount=?";
@@ -115,8 +119,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			pst.setInt(1, amount);
 			row = pst.executeUpdate();
 			log.getInput(row + " row updated");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -124,7 +128,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to set due date count.
 	 */
-	public int saveDueDays(int days) throws Exception {
+	public int saveDueDays(int days) throws DbException {
 		String sql = "update duedate set days=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -132,8 +136,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			pst.setInt(1, days);
 			row = pst.executeUpdate();
 			log.getInput(row + " row updated");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -141,20 +145,20 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to display the books Count
 	 */
-	public List<Additional> findBybooksCount() throws Exception {
+	public List<BookCount> findBybooksCount() throws DbException {
 		String sql = "select n.isbn_no,count(*) as cnt from fine_calc k,stock_room n where k.book_id=n.book_id group by n.isbn_no";
-		List<Additional> list = new ArrayList<Additional>();
+		List<BookCount> list = new ArrayList<BookCount>();
 		try (Connection connection = ConnectionUtil.getConnection();
 				PreparedStatement pst = connection.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
 			while (rs.next()) {
-				int isbn_no = rs.getInt("isbn_no");
+				int isbnno = rs.getInt("isbn_no");
 				int count = rs.getInt("cnt");
-				Additional bd = new Additional(isbn_no, count);
+				BookCount bd = new BookCount(isbnno, count);
 				list.add(bd);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 
 		return list;
@@ -165,7 +169,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	 * Used to list the remaining and taken books count for all the users to the
 	 * admin .
 	 */
-	public List<CalcCard> findAlluserCardCount() throws Exception {
+	public List<CalcCard> findAlluserCardCount() throws DbException {
 		String sql = "select user_id,count2(user_id)as taken_books, (case when count2(user_id)<=(select allocated_count from allocated) then((select allocated_count from allocated)-count2(user_id) )else 0 end)as remaining from users group by user_id";
 		List<CalcCard> list = new ArrayList<CalcCard>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -179,14 +183,18 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 				CalcCard k = new CalcCard(userId, takenBooks, remaining);
 				list.add(k);
 			}
-			return list;
+		} catch (SQLException e) {
+			throw new DbException("Invalid Select");
 		}
+		return list;
 	}
 
 	/**
 	 * Used to insert the return status in the database.
+	 * 
+	 * @throws SQLException
 	 */
-	public int updateReturnStatus(int bookId, int userId, Date returnedDate) throws Exception {
+	public int updateReturnStatus(int bookId, int userId, Date returnedDate) throws DbException {
 		int row = 0;
 		String sql = "update fine_calc set returned_date=?,status='Returned', fine_amount=fine_amount-fine_amount where book_id=? and user_id=? and status='Issued'";
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -196,8 +204,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 			pst.setInt(3, userId);
 			row = pst.executeUpdate();
 			log.getInput(row + " row updated");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -205,7 +213,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to insert the issued details in the database.
 	 */
-	public int saveUserBookDetails(int bookId, int userId, Date issuedDate) throws Exception {
+	public int saveUserBookDetails(int bookId, int userId, Date issuedDate) throws DbException {
 		int row = 0;
 		String str1 = "select isbn_no  from stock_room sr,fine_calc fc where sr.book_id = fc.book_id and user_id=? and isbn_no = (select isbn_no  from stock_room where book_id =?)";
 		String sql = "insert into fine_calc(item_id,book_id,user_id,issued_date)values(item_id_seq.nextval,?,?,?)";
@@ -224,8 +232,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 				row = pst.executeUpdate();
 				log.getInput(row + " row updated");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to insert");
 		}
 		return row;
 
@@ -234,28 +242,28 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to insert a new language in the library.
 	 */
-	public int saveNewLanguage(String language) throws Exception {
+	public int saveNewLanguage(String language) throws DbException {
 		int row = 0;
 		String sql = "insert into languages(languages) values(?)";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, language);
 			row = pst.executeUpdate();
 			log.getInput(row + " row inserted");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to insert");
 		}
 		return row;
 	}
 
-	public int deleteLanguage(String language1) throws Exception {
+	public int deleteLanguage(String language1) throws DbException {
 		String sql = "update languages set active=0 where languages=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, language1);
 			row = pst.executeUpdate();
 			log.getInput(row + " row deleted");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -263,7 +271,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to display all the languages in the database.
 	 */
-	public List<LanguageSettings> findAllLanguages() throws Exception {
+	public List<LanguageSettings> findAllLanguages() throws DbException {
 		List<LanguageSettings> list = new ArrayList<LanguageSettings>();
 		String sql = "select * from languages where active=1";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -274,27 +282,26 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 				LanguageSettings k = new LanguageSettings(language);
 				list.add(k);
 			}
-			return list;
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid Select");
 		}
 
-		return null;
+		return list;
 	}
 
 	/**
 	 * Used to insert the new category.
 	 */
-	public int saveNewCategory(String category) throws Exception {
+	public int saveNewCategory(String category) throws DbException {
 		String sql = "insert into category(categories)values(?)";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, category);
 			row = pst.executeUpdate();
 			log.getInput(row + " row inserted");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to insert");
 		}
 		return row;
 	}
@@ -302,15 +309,15 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to delete category.
 	 */
-	public int deteleCategory(String category1) throws Exception {
+	public int deteleCategory(String category1) throws DbException {
 		int row = 0;
 		String sql = "update category set active=0 where categories=?";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, category1);
 			row = pst.executeUpdate();
 			log.getInput(row + " row deleted");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -318,7 +325,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to display all the categories.
 	 */
-	public List<CategorySettings> findAllCategories() throws Exception {
+	public List<CategorySettings> findAllCategories() throws DbException {
 		List<CategorySettings> list = new ArrayList<CategorySettings>();
 		String sql = "select * from category where active=1";
 		try (Connection con = ConnectionUtil.getConnection();
@@ -329,8 +336,8 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 				CategorySettings d = new CategorySettings(category);
 				list.add(d);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return list;
 	}
@@ -339,16 +346,14 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	 * Used to update due date for the total records in the database.
 	 */
 	@Override
-	public int updateDueDateAll() throws Exception {
+	public int updateDueDateAll() throws DbException {
 		int row = 0;
 		String sql = "update fine_calc set due_date=(issued_date+(select days from duedate))";
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement stmt = con.prepareStatement(sql);) {
 			log.getInput(sql);
 			row = stmt.executeUpdate(sql);
-			con.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -357,16 +362,15 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	 * Used to update fine amount for all the records.
 	 */
 	@Override
-	public int updateFineAll() throws Exception {
+	public int updateFineAll() throws DbException {
 		String sql = "update fine_calc set fine_amount=FUNCTION3( book_id, user_id) where status='Issued'";
 		log.getInput(sql);
 		int row = 0;
-		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement stmt = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
-			row = stmt.executeUpdate(sql);
-			// log.getInput(row+" row updated");
-		} catch (Exception e) {
-			e.printStackTrace();
+			row = pst.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}
@@ -375,14 +379,14 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	 * Used to update the due date remaining days in the table.
 	 */
 	@Override
-	public int updatePopup(int popup) throws Exception {
+	public int updatePopup(int popup) throws DbException {
 		String sql = "update popup set popup=?";
 		int row = 0;
 		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, popup);
 			row = pst.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 		return row;
 	}

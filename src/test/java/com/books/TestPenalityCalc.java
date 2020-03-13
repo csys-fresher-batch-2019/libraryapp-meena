@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.books.logger.Logger;
-import com.books.dto.Additional;
+import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
@@ -70,8 +70,8 @@ public class TestPenalityCalc {
 				ob.updateDueDateAll();
 				break;
 			case 6:
-				List<Additional> displaycount = ob.booksCount();
-				for (Additional additional : displaycount) {
+				List<BookCount> displaycount = ob.booksCount();
+				for (BookCount additional : displaycount) {
 					log.getInput(additional);
 				}
 				break;

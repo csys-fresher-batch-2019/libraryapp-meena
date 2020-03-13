@@ -84,9 +84,7 @@ public class BookDetails {
 		this.active = active;
 	}
 
-	public BookDetails() {
-		super();
-	}
+	
 
 	@Override
 	public String toString() {
@@ -107,6 +105,9 @@ public class BookDetails {
 		this.languages = languages;
 		this.totalBook = totalBook;
 		this.active = active;
+	}
+
+	public BookDetails() {
 	}
 
 }

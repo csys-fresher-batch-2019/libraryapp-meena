@@ -3,12 +3,14 @@ package com.books.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.books.util.ConnectionUtil;
 import com.books.model.UserDetails;
 import com.books.dao.UserDetailsDAO;
+import com.books.exception.DbException;
 import com.books.logger.Logger;
 
 public class UserDetailsDAOImpl implements UserDetailsDAO {
@@ -17,7 +19,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 	/**
 	 * Used to save a new user.
 	 */
-	public int saveUserDetails(UserDetails userDetails) throws Exception {
+	public int saveUserDetails(UserDetails userDetails) throws DbException {
 		int row = 0;
 		String sql = ("insert into users(user_id,user_name,address,ph_no,email,password,gender)values(user_id_seq.nextval,?,?,?,?,?,?)");
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -32,8 +34,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 			log.getInput(row + "row inserted");
 			log.getInput(sql);
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to insert");
 		}
 
 		return row;
@@ -42,7 +44,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 	/**
 	 * Used to display all the user details.
 	 */
-	public List<UserDetails> findAllUserDetails() throws Exception {
+	public List<UserDetails> findAllUserDetails() throws DbException {
 		String sqlQuery = "select * from users where active=1";
 		List<UserDetails> list = new ArrayList<UserDetails>();
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -58,8 +60,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 				UserDetails bd = new UserDetails(userId, userName, address, phno, email, gender);
 				list.add(bd);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Invalid select");
 		}
 		return list;
 	}
@@ -67,7 +69,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 	/**
 	 * Used to delete the user from the database.
 	 */
-	public int deleteUserDetails(int userId) throws Exception {
+	public int deleteUserDetails(int userId) throws DbException {
 		String sql = ("update users set active=0 where user_id=?");
 		int row = 0;
 		try (Connection connection = ConnectionUtil.getConnection();
@@ -75,8 +77,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 			pst.setInt(1, userId);
 			row = pst.executeUpdate();
 			log.getInput(row + "row deleted");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DbException("Unable to update");
 		}
 
 		return row;
