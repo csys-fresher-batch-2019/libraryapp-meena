@@ -91,9 +91,8 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 				}
 			}
 		} catch (SQLException e) {
-		throw new DbException("Invalid Select");
-		}
-		catch(DbException e) {
+			throw new DbException("Invalid Select");
+		} catch (DbException e) {
 			throw new DbException("Connection error");
 		}
 		return list;
@@ -134,7 +133,7 @@ public class BookStockDetailsDAOImpl implements BookStockDetailsDAO {
 				list.add(e);
 			}
 		} catch (SQLException e) {
-		throw new DbException("Invalid select");
+			throw new DbException("Invalid select");
 		}
 		return list;
 	}

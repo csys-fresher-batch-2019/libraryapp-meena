@@ -1,16 +1,17 @@
 package com.books.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class User {
-	
+
 	private int bookId;
 	private int userId;
-	private Date issuedDate;
-	private Date dueDate;
-	private Date returnedDate;
+	private LocalDate issuedDate;
+	private LocalDate dueDate;
+	private LocalDate returnedDate;
 	private int fineAmount;
 	private String status;
+
 	public int getBookId() {
 		return bookId;
 	}
@@ -27,27 +28,27 @@ public class User {
 		this.userId = userId;
 	}
 
-	public Date getIssuedDate() {
+	public LocalDate getIssuedDate() {
 		return issuedDate;
 	}
 
-	public void setIssuedDate(Date issuedDate) {
+	public void setIssuedDate(LocalDate issuedDate) {
 		this.issuedDate = issuedDate;
 	}
 
-	public Date getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 
-	public Date getReturnedDate() {
+	public LocalDate getReturnedDate() {
 		return returnedDate;
 	}
 
-	public void setReturnedDate(Date returnedDate) {
+	public void setReturnedDate(LocalDate returnedDate) {
 		this.returnedDate = returnedDate;
 	}
 
@@ -66,7 +67,9 @@ public class User {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public User(int bookId, Date issuedDate, Date dueDate, Date returnedDate, int fineAmount, String status2) {
+
+	public User(int bookId, LocalDate issuedDate, LocalDate dueDate, LocalDate returnedDate, int fineAmount,
+			String status2) {
 		this.bookId = bookId;
 		this.issuedDate = issuedDate;
 		this.dueDate = dueDate;
@@ -74,8 +77,6 @@ public class User {
 		this.fineAmount = fineAmount;
 		this.status = status2;
 	}
-
-	
 
 	@Override
 	public String toString() {

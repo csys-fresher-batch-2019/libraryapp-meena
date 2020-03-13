@@ -1,19 +1,19 @@
 package com.books.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class PenalityCalc {
 	private int itemId;
 	private int bookId;
 	private int userId;
-	private Date issuedDate;
-	private Date dueDate;
-	private Date returnedDate;
+	private LocalDate issuedDate;
+	private LocalDate dueDate;
+	private LocalDate returnedDate;
 	private int fineAmount;
 	private String status;
 
-	public PenalityCalc(int itemId, int bookId, int userId, Date issuedDate2, Date dueDate2, Date returnedDate2,
-			int fineAmount, String status) {
+	public PenalityCalc(int itemId, int bookId, int userId, LocalDate issuedDate2, LocalDate dueDate2,
+			LocalDate returnedDate2, int fineAmount, String status) {
 		super();
 		this.itemId = itemId;
 		this.bookId = bookId;
@@ -49,27 +49,27 @@ public class PenalityCalc {
 		this.userId = userId;
 	}
 
-	public Date getIssuedDate() {
+	public LocalDate getIssuedDate() {
 		return issuedDate;
 	}
 
-	public void setIssuedDate(Date issuedDate) {
+	public void setIssuedDate(LocalDate issuedDate) {
 		this.issuedDate = issuedDate;
 	}
 
-	public Date getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 
-	public Date getReturnedDate() {
+	public LocalDate getReturnedDate() {
 		return returnedDate;
 	}
 
-	public void setReturnedDate(Date returnedDate) {
+	public void setReturnedDate(LocalDate returnedDate) {
 		this.returnedDate = returnedDate;
 	}
 

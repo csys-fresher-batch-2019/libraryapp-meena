@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +36,9 @@ public class UserDAOImpl implements UserDAO {
 			while (rs.next()) {
 				flag = 1;
 				int bookId = rs.getInt("book_id");
-				Date issuedDate = rs.getDate("issued_date");
-				Date returnedDate = rs.getDate("returned_date");
-				Date dueDate = rs.getDate("due_date");
+				LocalDate issuedDate = LocalDate.parse(rs.getDate("issued_date") + "");
+				LocalDate returnedDate = LocalDate.parse(rs.getDate("returned_date") + "");
+				LocalDate dueDate = LocalDate.parse(rs.getDate("due_date") + "");
 				int fineAmount = rs.getInt("fine_amount");
 				String status = rs.getString("status");
 				User u = new User(bookId, issuedDate, dueDate, returnedDate, fineAmount, status);
@@ -58,7 +59,8 @@ public class UserDAOImpl implements UserDAO {
 
 	/**
 	 * Used to validate the login details of the user.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public int findByUser(String email, String password) throws DbException, SQLException {
 		int uid = 0;
@@ -100,9 +102,9 @@ public class UserDAOImpl implements UserDAO {
 			while (rs.next()) {
 				flag = 1;
 				int bookId = rs.getInt("book_id");
-				Date issuedDate = rs.getDate("issued_date");
-				Date returnedDate = rs.getDate("returned_date");
-				Date dueDate = rs.getDate("due_date");
+				LocalDate issuedDate = LocalDate.parse(rs.getDate("issued_date") + "");
+				LocalDate returnedDate = LocalDate.parse(rs.getDate("returned_date") + "");
+				LocalDate dueDate = LocalDate.parse(rs.getDate("due_date") + "");
 				int fineAmount = rs.getInt("fine_amount");
 				String status = rs.getString("status");
 				User u = new User(bookId, issuedDate, dueDate, returnedDate, fineAmount, status);
@@ -276,9 +278,9 @@ public class UserDAOImpl implements UserDAO {
 
 					int bookId = rs.getInt("book_id");
 
-					Date issuedDate = rs.getDate("issued_date");
-					Date returnedDate = rs.getDate("returned_date");
-					Date dueDate = rs.getDate("due_date");
+					LocalDate issuedDate = LocalDate.parse(rs.getDate("issued_date") + "");
+					LocalDate returnedDate = LocalDate.parse(rs.getDate("returned_date") + "");
+					LocalDate dueDate = LocalDate.parse(rs.getDate("due_date") + "");
 					int fineAmount = rs.getInt("fine_amount");
 					String status = rs.getString("status");
 					User u = new User(bookId, issuedDate, dueDate, returnedDate, fineAmount, status);
@@ -297,7 +299,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	/**
-	 * @throws SQLException 
+	 * @throws SQLException
 	 * 
 	 */
 	@Override

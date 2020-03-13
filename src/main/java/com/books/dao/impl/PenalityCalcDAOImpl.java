@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +52,9 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 					int itemId = rs.getInt("item_id");
 					int bookId = rs.getInt("book_id");
 					int userId = rs.getInt("user_id");
-					Date issuedDate = rs.getDate("issued_date");
-					Date dueDate = rs.getDate("due_date");
-					Date returnedDate = rs.getDate("returned_date");
+					LocalDate issuedDate = LocalDate.parse(rs.getDate("issued_date") + "");
+					LocalDate dueDate = LocalDate.parse(rs.getDate("due_date") + "");
+					LocalDate returnedDate = LocalDate.parse(rs.getDate("returned_date") + "");
 					int fineAmount = rs.getInt("fine_amount");
 					String status = rs.getString("status");
 
