@@ -2,7 +2,7 @@ package com.books.model;
 
 import java.time.LocalDate;
 
-public class PenalityCalc {
+public class PenaltyCalc {
 	private int itemId;
 	private int bookId;
 	private int userId;
@@ -12,7 +12,7 @@ public class PenalityCalc {
 	private int fineAmount;
 	private String status;
 
-	public PenalityCalc(int itemId, int bookId, int userId, LocalDate issuedDate2, LocalDate dueDate2,
+	public PenaltyCalc(int itemId, int bookId, int userId, LocalDate issuedDate2, LocalDate dueDate2,
 			LocalDate returnedDate2, int fineAmount, String status) {
 		super();
 		this.itemId = itemId;
@@ -23,6 +23,10 @@ public class PenalityCalc {
 		this.returnedDate = returnedDate2;
 		this.fineAmount = fineAmount;
 		this.status = status;
+	}
+
+	public PenaltyCalc() {
+
 	}
 
 	public int getItemId() {

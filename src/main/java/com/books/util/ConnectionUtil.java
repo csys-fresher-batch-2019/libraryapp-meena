@@ -9,7 +9,6 @@ import com.books.logger.Logger;
 
 public class ConnectionUtil {
 	private static final Logger log = Logger.getInstance();
-
 	public static Connection getConnection() throws DbException {
 		try
 		{
@@ -24,6 +23,5 @@ public class ConnectionUtil {
 		}catch (ClassNotFoundException e) {
 			throw new DbException("Driver not found");
 		}
-		
 	}
 }

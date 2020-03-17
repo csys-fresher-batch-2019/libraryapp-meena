@@ -1,24 +1,23 @@
 package com.books.service;
-
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
-
-import com.books.dao.PenalityCalcDAO;
+import com.books.dao.PenaltyCalcDAO;
 import com.books.daofactory.DAOFactory;
 import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
-import com.books.model.PenalityCalc;
+import com.books.model.PenaltyCalc;
 
 public class PenaltyCalcService {
-	private PenalityCalcDAO penaltyCalcDAO = DAOFactory.getPenalityCalcDAO();
+	private PenaltyCalcDAO penaltyCalcDAO = DAOFactory.getPenalityCalcDAO();
 
 	public void calculateFineAmount(int bookId, int userId) throws Exception {
 		penaltyCalcDAO.findFineAmount(bookId, userId);
 	}
 
-	public List<PenalityCalc> displayFineDetails() throws Exception {
+	public List<PenaltyCalc> displayFineDetails() throws Exception {
 		return penaltyCalcDAO.findAllFineDetails();
 	}
 
@@ -88,5 +87,13 @@ public class PenaltyCalcService {
 
 	public int updatePopup(int popup) throws Exception {
 		return penaltyCalcDAO.updatePopup(popup);
+	}
+
+	public int insertUserBookDetails(int bookId, int userId, LocalDate issuedDate) {
+		return 0;
+	}
+
+	public int updateReturnStatus(int bookId, int userId, LocalDate returnedDate) {
+	return 0;
 	}
 }

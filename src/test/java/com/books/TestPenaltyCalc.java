@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.books.logger.Logger;
+import com.books.model.PenaltyCalc;
 import com.books.dto.BookCount;
 import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
-import com.books.model.PenalityCalc;
 import com.books.service.BookStockDetailsService;
 import com.books.service.PenaltyCalcService;
 
-public class TestPenalityCalc {
+public class TestPenaltyCalc {
 	private static final Logger log = Logger.getInstance();
 
 	public static void main(String[] args) throws Exception {
@@ -47,9 +47,9 @@ public class TestPenalityCalc {
 				int row = ob.updateReturnStatus(bookId, userId, date);
 				log.getInput(row);
 			case 2:
-				List<PenalityCalc> display = ob.displayFineDetails();
-				for (PenalityCalc penalityCalc : display) {
-					log.getInput(penalityCalc);
+				List<PenaltyCalc> display = ob.displayFineDetails();
+				for (PenaltyCalc penaltyCalc : display) {
+					log.getInput(penaltyCalc);
 				}
 				break;
 			case 3:

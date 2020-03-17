@@ -38,7 +38,6 @@ public class CalcCard {
 	}
 
 	public CalcCard() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

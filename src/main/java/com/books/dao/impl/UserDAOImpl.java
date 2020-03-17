@@ -2,7 +2,6 @@ package com.books.dao.impl;
 
 import java.sql.Connection;
 import com.books.logger.Logger;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

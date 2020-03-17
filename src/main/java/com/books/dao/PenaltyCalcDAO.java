@@ -8,12 +8,12 @@ import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
 import com.books.exception.DbException;
-import com.books.model.PenalityCalc;
+import com.books.model.PenaltyCalc;
 
-public interface PenalityCalcDAO {
+public interface PenaltyCalcDAO {
 	public void findFineAmount(int bookId2, int userId2) throws DbException;
 
-	public List<PenalityCalc> findAllFineDetails() throws DbException;
+	public List<PenaltyCalc> findAllFineDetails() throws DbException;
 
 	public int updateDueDate(int bookId2, int userId2) throws DbException;
 

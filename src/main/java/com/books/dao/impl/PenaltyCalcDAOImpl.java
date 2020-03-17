@@ -15,11 +15,11 @@ import com.books.dto.CalcCard;
 import com.books.dto.CategorySettings;
 import com.books.dto.LanguageSettings;
 import com.books.exception.DbException;
-import com.books.model.PenalityCalc;
-import com.books.dao.PenalityCalcDAO;
+import com.books.model.PenaltyCalc;
+import com.books.dao.PenaltyCalcDAO;
 import com.books.logger.Logger;
 
-public class PenalityCalcDAOImpl implements PenalityCalcDAO {
+public class PenaltyCalcDAOImpl implements PenaltyCalcDAO {
 	private static final Logger log = Logger.getInstance();
 
 	/**
@@ -42,9 +42,9 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 	/**
 	 * Used to display all the book issued records.
 	 */
-	public List<PenalityCalc> findAllFineDetails() throws DbException {
+	public List<PenaltyCalc> findAllFineDetails() throws DbException {
 		String sql = "select *from fine_calc";
-		List<PenalityCalc> list = new ArrayList<PenalityCalc>();
+		List<PenaltyCalc> list = new ArrayList<PenaltyCalc>();
 		try (Connection connection = ConnectionUtil.getConnection();
 				PreparedStatement pst = connection.prepareStatement(sql)) {
 			try (ResultSet rs = pst.executeQuery()) {
@@ -58,7 +58,7 @@ public class PenalityCalcDAOImpl implements PenalityCalcDAO {
 					int fineAmount = rs.getInt("fine_amount");
 					String status = rs.getString("status");
 
-					PenalityCalc bd = new PenalityCalc(itemId, bookId, userId, issuedDate, dueDate, returnedDate,
+					PenaltyCalc bd = new PenaltyCalc(itemId, bookId, userId, issuedDate, dueDate, returnedDate,
 							fineAmount, status);
 					list.add(bd);
 				}
